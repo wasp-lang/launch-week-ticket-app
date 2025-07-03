@@ -1,0 +1,2941 @@
+0:00
+hey people so there's a lot of talk about vibe coding apps and there's you know a lot of hype and there's also some
+0:06
+skepticism around it whether you can really make complex apps or not so I
+0:12
+kind of set out to see if that's possible and I'm going to walk you through how I built a fullfeatured full
+0:20
+stack uh collaborative envelope budgeting app with um a few tools with
+0:26
+including cursor and using Gemini 2.0 0 I'm sorry 2.5 Pro to do it and I want to
+0:33
+do this to kind of give you a realistic uh view into what that looks like and if
+0:40
+it's possible and I will say it is possible um you need to have some coding knowledge of course and the more you
+0:45
+have and the more you understand your project uh files the better um but yeah
+0:53
+uh this is going to be a long form video and there will be timestamps so you can
+0:59
+jump around to the sections that are uh interesting to you or you can follow along completely um I'll have the repo
+1:05
+up so that you can start at the same point that I'm starting at and use the same prompts that I'll be using more or
+1:11
+less and yeah so um let's just get right into it um like I said the goal of this
+1:18
+video is to be a realistic view of a complete walkthrough of vibe coding a fullfeatured fullstack web app and I
+1:24
+found a pretty decent approach to vibe coding with cursor in Gemini 2.5 Pro which I'd refer to more as this guide
+1:30
+coding because we're creating really um detailed plans implementation plans and
+1:36
+we're going through them very carefully and building on top of simple uh
+1:42
+vertically sliced full stack features and building on top of them um over time in complexity so we start simple and
+1:49
+then we get more and more complex um we're going to do a collaborative envelope budgeting app because this is
+1:55
+something that um a lot of people said that they would like to have they don't want to pay for there's similar
+2:00
+solutions that are like 10 bucks a month and you can build this yourself um you
+2:05
+know just run it locally or host it uh somewhere just for yourself and and your roommates or your partner and
+2:11
+collaborate on your budget so it's pretty cool um app to have kind of in your arsenal and yeah it's something
+2:18
+that's just complex enough that um wouldn't be easy to do um that I'm sorry
+2:25
+it's complex enough that like when you're using these tools and using AI to
+2:31
+actually make the app it's impressive enough but it's not too complex that it's going to take um get really crazy
+2:38
+and maybe um uh be harder to do than you
+2:44
+might have expected so the basic approach that we're going to use is we're going to start with a strong basis
+2:51
+so we're going to start with a strong template and the template that I'm using here is um shad CN admin so these are UI
+3:00
+components that are built and specifically for an admin dashboard and this gives us a great start for um
+3:07
+building an budgeting app right so we have lots of numbers calculations the monthly budget the different envelopes
+3:14
+things like that so this is what the template looks like when you when you get it and it's simply UI so front end
+3:19
+stuff there's no backend there's no functionality here you can't do anything this is just dummy data um but it looks
+3:25
+really nice so great we've got all these UI components that we can use and I've put these into a Wasp project and WASP
+3:32
+is a full stack framework with batteries included and just by defining some
+3:38
+things in an um in a main config file like for example authentication you get
+3:43
+full stack authentication managed for you by Wasp uh without having to write a ton of code and this makes it really
+3:49
+easy as well for the LLM to code these features for you and to create these
+3:55
+features for you so I've got this Shad CN admin template um in a Wasp project
+4:01
+and this has really helped jumpstart and guide the coding
+4:07
+process so yeah um I spent a few days getting this process down before trying this now on stream and um it was working
+How to vibe code a full-stack app the right way
+4:15
+surprisingly well so um yeah starting with the template um I've also created
+4:22
+all the rules for AI files which previously if you've been using cursor it was all packed into one cursor rules
+4:28
+file um but now they've switched to this um these MDC files and um so I've got
+4:34
+both here in the project uh you can choose which one you want to use they're going to deprecate the cursor rules file
+4:39
+so the um separate rules within MDC files is actually um the way you should
+4:45
+go uh so yeah like I've got these um uh files all set out that have all the
+4:50
+rules and they're pretty extensive so this also a big help um having that down um so that's already done for us and
+4:58
+from here we're going to create and revise a product requirement doc which is like a really nice description of how
+5:04
+the app should uh be behave and and function and then from that we're going
+5:10
+to generate the plan and we're going to use the vertical slice pattern like I said before which is we've got a full
+5:15
+stack app so we have features that go across the entire stack from the client to the database layer and we're going to
+5:22
+develop one of these full stack features at a time start with simp um low on the complexity and scale up and we're going
+5:30
+to constantly ask LLM to test our assumptions we're going to ask it to you know think about different solutions
+5:35
+before choosing the best one and implementing it and that's basically it so um yeah let's go ahead and uh get
+Explaining the PRD Prompt
+5:43
+started um I have some prompts that I prepared here so I'm just going to copy copy this um initial prompt real quick
+5:52
+and um I will read it off to you so that um you don't have to read it all but let's
+5:59
+go first to set up a new chat and like I said I'm using Gemini 2.5 Pro i found
+6:04
+that this has been really great um for uh yeah vibe coding um Gemini seems to
+6:11
+really get what what's going on and what needs to be done and doesn't um always just agree with you which I like
+6:19
+so yeah before we do that though let's just jump through the project
+6:25
+um real quick and I'll show you what we've already got so we've got all these components the shad CN admin components
+6:32
+in the components library along with some config and context for the app then we got these features here so they
+6:38
+correspond obviously to the features in the app which are dashboard tasks apps
+6:44
+and stuff like that so when I see things like the tasks already I already think like okay this will be great for transactions for putting in transactions
+6:53
+um that uh correspond to um uh yeah expenses or income right that will be
+6:59
+good for this budgeting app so yeah you see we have a really good starting point here that's about it um besides that we
+7:05
+have the main.wisp file which is the central config file i said um that yeah
+7:11
+is where you it's a a a central point where you can describe your app with um things like o your client and server
+7:18
+config uh your roots and your backend um
+7:23
+uh operations which are like uh fetches and mutations so by defining them here
+7:28
+and then importing the function that um uh it refers to you don't have to uh
+7:37
+manage and configure the entire server wasp will do that for you um the roots and the authorization things like that
+7:44
+authentication it will take care of all this stuff for you and even give you some um pre-built components and other
+7:50
+things like that so it's really great for um speeding up the process and removing a lot of boiler plate so that's
+7:56
+pretty much the project in a nutshell um so yeah let's get coding um I'm going to
+8:03
+paste the first prompt in and um I wish it showed it here is there a way we can
+8:10
+get it to show maybe I can right click it h so it doesn't show it so I'll read it
+8:16
+from the note um so the goal of uh sorry here it is i
+8:22
+want to create a collaborative envelope budgeting app with the current template project I'm in which uses Wasp and Shad
+8:28
+CNN UI components it's an admin dashboard so it'll know about WASP
+8:34
+already because I have a whole cursor rule about what WASP is the Wasp docs how it works stuff like that also
+8:41
+project conventions how I want things to basically be done as well as troubleshooting like if you run into
+8:47
+these errors this is what you should probably do so it's going to have a good understanding of of how Wasp works and
+8:53
+what the common issues might be be around it so go back to the
+8:59
+prompt um leveraging Wasp full stack features such such as off let's build this app
+9:06
+based on the following specifications users have one budget profile they use users can invite others
+9:12
+to collaborate on the budget with them via their email transactions can be individually entered manually or bulk
+9:18
+implemented via CSV files from their bank bulk import shouldn't assume a
+9:24
+certain CSV file format but rather map the headers of the file to a set of predefined values within the app like
+9:31
+date description value type and um this is just like if you get a file a CSV
+9:36
+from one bank it might be way different than another so we basically want certain information we want the date
+9:42
+description the value and whether it's an expense or an income right um and so
+9:48
+we're going to map whatever values from that CSV when we import it we're going to map those to those values that we set
+9:53
+in the app uh new features should be styled and created using the demo features in the source features uh
+10:00
+directory as examples and we want to use this modified vertical slice implementation approach that's suitable
+10:05
+for LLM assisted coding i do this a lot i often ask it like hey is this great for LLM assisted coding I don't know if
+10:12
+it helpful or not but it seems to work for me with this in mind I want you to first evaluate the project template
+10:18
+think about few possible PRD approaches before landing on the best one so
+10:24
+provide reasoning why this would be the best approach remember we're using Wasp the full stack framework with batteries
+10:30
+included that can do some of the heavy lift lifting for us and we don't need to create an enterprise level app it will
+10:35
+be for personal use we want to use the vertical slice implementation approach so we can start with the basic
+10:40
+implementations of features first and add on complexity from there and one thing I forgot to mention before we
+Starting the app (see the repo above for instructions)
+10:46
+start we want to actually start the app and because this is a full stack app with a postgrad database running locally
+10:53
+we um have to install Wasp which you can you can get the install script um from
+11:01
+wasp.sh and I'll show it real quick
+11:06
+we go to getting started you'll see there's a install script there you're going to paste that into your terminal
+11:12
+and run it you'll get Wasp uh um installed and then you'll want to have
+11:17
+Docker I have Docker Desktop installed and running and then with that I can run Wasp DB start and this starts a
+11:24
+Postgress database that's connected to our app right away and we leave that running and we open a new terminal
+11:29
+window and we're going to run wasp db migrate dev just to initialize the
+11:36
+database but I've already done that so I'm going to run wasp start whoops wasp tart wasp start um it says use nvm uh
+11:45
+node version 20 so nvm use 20 if you run into that make sure you have nvm
+11:51
+installed and you can switch between um node versions so let's we're using node
+11:57
+version 20 now and I can run wasp
+12:02
+start okay now it's building the SDK compiling the
+12:09
+app and then from there h it does look like I need to um
+12:17
+uh to migrate the database so I was wrong so let's do wasp db migrate dev
+Generating the PRD from prompt
+12:29
+okay and we've got the app running and let's tell it here's I've
+12:36
+copy and pasted the prompt it put it up there so I'll just say please implement
+12:41
+the PRD as [Music] described and we're
+12:48
+off and you'll see it does a lot of thinking in the background and it's going to give um a lot of stuff that I
+12:55
+can't read fast enough but I'm just going to go ahead and accept a lot of the um changes that it makes and we'll
+13:01
+just deal with problems as they arise hopefully stuff's work works we'll check it out as we go uh you can see it's
+13:08
+creating um a plan that will or a PRD that talks about
+13:16
+um let's see ah so it has a proposed implementation plan but it didn't write
+13:21
+it to to the the disk um and what I want to do here first is create a AI folder
+13:30
+and I'm just going to put the plan MD and empty PRDMD in there and I'm going
+13:37
+to say now it's given me this uh these phases um it's a proposed implementation
+13:45
+plan phase one phase two phase three and it asks shall we proceed with phase one
+13:50
+sure let's proceed with phase one write the PRD to the PRD md file and
+14:02
+I got that just by writing at and then searching PRD.MD and let's see what it does for us i'm going to switch to agent
+14:09
+mode so that it uh makes changes for us that's probably
+14:14
+why it didn't do it before it might have been in ask mode still cool so now we see it applying
+14:20
+changes cool and they're over here so core features implementation
+14:27
+guidelines let's see what it's doing
+14:41
+now okay so on quick overview it's not really that big um it gives us basically
+14:49
+what we said before but it breaks down its core features into um a few
+14:54
+different parts and a few implementation guidelines i like that but now I'll say okay now you've
+Generating the implementation PLAN for AI to follow from the PRD
+15:02
+created Oh I think I actually have a prompt for this so let's go back and I have a plan prompt so I'm
+15:11
+going to give that and it says "From this PRD create an actionable step-by-step plan that we can use as a
+15:16
+guide for LLM assisted uh coding before you create the plan think about a few different plan styles that would be
+15:22
+suitable for this project before selecting the best one give your reasoning for why you think this uh we
+15:27
+should use this plan style." So let's paste that in and let's see what it does
+15:38
+i forgot to mention that it should write it in um plan.md let's maybe it figures that out by
+15:47
+itself planning style for this project vertical slice imitation
+15:53
+or a milestone based combined with user stories all right so it's wants to
+15:59
+create user stories that we can go from it's creating four
+16:06
+phases the plan provides a structured row map say write this plan to plan
+16:19
+MD and we want that so that we can you know implement one thing at a time um we can just go subtask by subtask and break
+16:28
+everything up into chunks for the LLM okay
+16:38
+great so we've got it all there the phase three phase 4 CSV import is phase
+16:44
+four um let's see what we got there budget category budget profile
+16:52
+entity um I'm just going to ask it a question real accept that and ask it a question real quick say in the
+17:01
+plan do we have instructions for
+17:07
+implementing envelopes remember this is an envelope
+17:13
+budgeting app and if it doesn't we'll ask it to
+17:20
+update it accordingly because I'm not going to read all that revive coding
+17:27
+says "Yeah the implementation does include for envelopes concept below primarily refers to them as budget
+17:34
+categories." And then I'm going to say "Can you refactor the plan to include
+17:41
+um specific mention of envelopes for our envelope budgeting app
+17:55
+also refactor it to use these little things which are to do check boxes
+18:06
+right so oh I forgot to put it i'm going to stop i'm going to I forgot to put it in
+18:11
+agent mode let's just go to agent mode so that it can um make changes on its
+18:20
+own all right great now you see there it's refactoring everything to use checkboxes so we can check those off as
+18:26
+we go which is great it's a lot cleaner that way um let's see did I mention
+18:33
+envelopes and envelopes yeah budget envelope I
+18:39
+created um okay it's still putting envelopes in
+18:47
+in parenthesis so I'm going to say explicitly change the
+18:54
+category model to be named envelope and update the entire plan
+19:04
+accordingly oops
+19:14
+agent yes i want to fully commit to the envelope
+19:25
+terminology okay so it says now uses
+19:30
+envelopes let's see if that's correct if I go up here yeah budget profile entity
+19:36
+budget envelope entity great so we're going to have envelope models in the database um we're going to apply that to
+19:43
+plan MD we're going to accept changes accept all
+19:50
+perfect all right and from
+19:56
+there I think we can start implementing right so let's just look at it real quick phase
+20:04
+one we've got the goal is to establish user authentication create the basic budget structure and allow users to
+20:10
+manage budget envelopes so step one oh why didn't we get the nice um to-do
+20:17
+boxes there that's
+20:23
+annoying i thought we had that there you go this is what vibe coding is all about complaining to the
+20:31
+LLM refactor
+20:36
+plan MD to use check boxes please
+20:41
+or you go to jail okay
+20:47
+accept accept it all accept it all and let's go so number one off setup
+1.1 - fullstack Auth
+20:52
+configure and verify wasp built-in off username and password ensure users can sign up log in and log out define as
+20:59
+necessary fields email hash password etc implicitly via W wasp config or explicitly in if needed okay we know I
+21:07
+know that wasp doesn't need hash password and all that stuff so I've um
+21:13
+done that in here it says agent requested which means the agent is doing anything related to off it'll look up
+21:19
+these rules so let's see if it can do that um correctly so I'll say
+21:25
+great let's implement step 1.1 from the plan
+21:35
+let's reference um
+21:40
+the three database operations
+21:46
+reference off rules for your process implementing whatever just leave
+21:54
+it like that i don't know what I mean I think great so it's looking at that it's
+22:02
+referencing rules and it's figuring out that it's
+22:08
+going to use a different method from uh Wasp instead of username and password it will use the email method let's see if
+22:13
+we can get it right it's pretty tricky to be honest um I was impressed with what it did last
+22:20
+time okay so it's changing the method to email adding an email
+22:29
+sender um it's implementing
+22:34
+some different off pages
+22:39
+cool which it's probably defining here right so it's implementing the
+22:46
+uh off pages and routes in the file um so I'm just going to
+22:52
+accept and let's see we got some errors down there for a second but it might
+23:00
+uh Okay one error found um let me just copy and paste
+23:06
+these to the chat say fix these errors please or you
+23:13
+go to jail okay so it's looking for O
+23:18
+wrapper um might not I don't think there is any O wrapper
+23:25
+so it's going to fix email verification it says assuming an offrapper
+23:36
+exists okay so I can see that it actually had a better
+23:42
+um better implementation from the beginning um so I'm actually just going to stop
+23:50
+this and this is because I I know that Wasp gives us um O stuff out of the box
+23:56
+um and so yeah this email verification form like it was right it was getting that um and I think the issue here is
+24:03
+that I have this authentication thing set on agent requested i'm just going to set it to always i think that'll be a
+24:10
+better approach um as well as the advanced troubleshooting so that they're always
+24:15
+passed in the context so let's just reject all and let's go back up to where
+24:21
+we started where it says where was it uh here fix these errors please and let's
+24:28
+just try it again see if it gets it this time and this is an instance where
+24:35
+um I know that off gives uh Wasp gives these uh off UI forms um right away so
+24:44
+it looks like let's see what it exports from off
+24:51
+UI um verify email form so it's just getting the the name wrong there it goes
+24:58
+it got it right and it's trying to rely on this O wrapper which doesn't exist so
+25:05
+I don't know why it's hung up on that and we're just going to accept it and um not use the O wrapper
+25:12
+um in fact there's this one has a decent wrapper so why don't we just use that one i think that would make more sense
+25:21
+um ah it's getting it now there it goes so I think just setting that so that's a
+25:28
+good thing to look out for um these rules when you use MDC files
+25:33
+you can see agent requested so like if the agent's looking for it um you can set it to always or you can set it to
+25:39
+manual and uh last time I used the cursor rules file this time um I'm using
+25:45
+the MDC files so I'm just going to leave most of them on always so they're always
+25:50
+being passed into the chat context and let's accept let's go see if we have any more errors in our uh terminal
+25:59
+here i'm hoping this will work looks like it looks good yep we got the right
+26:04
+things being exported we got login and sign up coming from Wasp off um so yeah
+26:12
+that looks like a good start it says recompilation successful let's try it if we go to
+26:18
+Right now nothing's being logged in nothing's being uh authorized so if we go to login cool we go to sign
+26:25
+up let's sign up where is it sign up oop sign up okay let's let's try and
+26:32
+sign up an account so we need an email so we're just using it's just um uh
+26:38
+development so we can use fake email sign up okay we get a network error where's the network error happening let
+26:46
+me try again create a new account email.com fake
+26:51
+password okay I don't see anything here so let's see what we see in the
+26:57
+console and we can um What's this get out of here one
+27:03
+password react router create new account
+27:09
+vinnie.com password one two three uh connection refused why is connection
+27:18
+refused is it not working is the thing ah oh we have
+27:27
+some is not let me try and run the I think the database wasn't running let's
+27:33
+see if we do it now ready to accept and if we do start okay so I did I canceled
+27:40
+the um the postcost database running locally and I restarted it
+27:47
+um and let's see now if we can get things to work at
+27:54
+email.com password 1 2 3 yay so we're using a dummy email sender um instead of
+28:03
+a real provider so like send grid or something like that or an SMTP host so
+28:08
+it's going to log the verification uh email to the um
+28:16
+uh the console so I'm going to click it email verified you can now log in let's see if that's true
+28:23
+um localhost login
+28:32
+vinnie.com cool and it worked and we can um check that that worked by looking at
+28:40
+the console for one or we can go to our main.wasp file and I don't need the um
+28:47
+uh what do you call it the uh LLM to put in one line but all we
+28:53
+have to do is put in one line to make this route this page um uh uh authorized
+29:01
+so you have to be authenticated to log in so off required is true we can do the same for any other page let's just do it
+29:06
+for that so we are logged in cool so I will ask it can you please
+29:14
+um mark that step as
+29:21
+complete that's something I could probably also do myself but vibe code we're vibe
+29:29
+coding yeah that that's kind of stupid let's stop that okay so great we got off set up
+1.2 - budget profile entities and auth hooks
+29:37
+pretty easily ready to move on to step one two yes let's move on to step 1.2 which is
+29:46
+budget profile uh entities or database models um was refers to them as entities
+29:54
+because they can be used these database models can be used throughout the entire app so let's see
+30:02
+now thinking thinking thinking we're going to create a budget entity in the
+30:07
+schema.prisma prisma file link to the user establish logic perhaps in a user
+30:12
+creation hook or first logic action login action to ensure each user is associated with a
+30:23
+budget cool okay so it's selfcorrected and it's
+30:30
+applying changes to the budget i'm sorry to the schema.prisma file adding budgets
+30:38
+and it's adding relations to be defined in later steps i like that that's really cool that's great it knows what it's
+30:46
+going to do in advance because we created the PRD and this plan so that's really nice okay now we need to run Wasp
+30:54
+DB migrate dev i hope it works in here i don't know why I can't let me do pop out ter to terminal let me do nvm or let me
+31:03
+do it here um I don't know why I have keep having
+31:09
+to switch to that but let's do Wasp DB migrate dev after switching to node
+31:15
+20 okay and it says let me know when you've updated Node.js and successfully run the migration so smartbot knows to
+31:24
+and we're going to call this budget entity and then wasp start and I say
+31:33
+okay I migrated that database
+31:45
+buddy um okie
+31:51
+dokie so now it's doing
+31:58
+stuff there's our
+32:06
+app it looks like we crashed let's restart while we
+32:11
+start this buddy just keeps on coding
+32:20
+um cool it's adding an off hook on user signup
+32:26
+um did you mean on after signup hook so let's try that on so we got an error
+32:32
+here it says uh has no exported member called um on user signup
+32:40
+hook server hooks uh okay so let's just again let's pass
+32:48
+it to the chat and say uh let's say accept all pass that bad boy to the chat
+32:53
+say fix so it looks like it's referencing the wrong
+32:59
+um type definition it should match this one so it should be
+33:05
+um on after signup or something like that
+33:13
+i mean the error pretty much gives you the answer there right on after sign up um I think it's expecting different
+33:24
+arguments expected two but it got
+33:32
+one so it's consulting the wasp documentation on on after signup hook
+33:38
+which is pretty cool i'm going to click auto search for next time but it's going to look at the docs and try and figure
+33:44
+out what's going on here so that's really sweet um pretty amazing to be honest because that would be the point
+33:50
+where I would have to go do that
+33:56
+myself so it said got it the search results confirm the signature of on after signup and wow look at
+34:03
+that fixed it for us pretty nice i'm going to say accept let's go back
+34:10
+and run wasp start to start the app oh what do we have we have an issue here in
+34:16
+the file uh where did hooks
+34:22
+go hooks uh type error again let's just pass
+34:29
+the to the chat and say fix looks like we have an issue with the field hooks
+34:38
+um it'll probably do some
+34:44
+searching probably on after sign up but as it's suggesting but let's see what it
+34:51
+does yeah on after sign up so cool there's a good instance of
+34:57
+where it's going to assume some of the things some of the definitions on its
+35:03
+own um without consulting the um uh the docs and then it runs into an error and
+35:10
+then it consults the docs and it realizes okay you don't have to define it via the um a hook object so with that
+35:16
+we should be able to run again and the reason it's doing that I saw when it was
+35:21
+creating is that it's going to create a sign on after signup hook that will look if a budget profile has been created or
+35:29
+not yet for the user so if it's the first time they're logging in there won't be and it'll probably um redirect
+35:34
+them to um to that uh budget profile um uh page
+35:43
+to create one um so cool uh let's see okay where were
+1.3 - budget envelope entity and migrate db
+35:51
+we at in the plan what should be done
+35:58
+next
+36:04
+um okay we finished the implementation um the next step so they finished the
+36:10
+implementation for that so let's just go to our plan and we will check that off and it says next is um budget envelope
+36:17
+entity are we ready to create the budget envelope entity in the schema prisma
+36:22
+file um yeah let's do
+36:30
+it cool so after we create these database models you'll see it's going to want to create the operations which are
+36:37
+the backend functions um our server side functions for things like creating an
+36:42
+envelope getting envelopes stuff like that
+36:49
+um I wonder if there's any if it's user creator first
+36:54
+login um if it'll just create a budget on we'll see probably create one budget
+37:00
+so there will be a budget the way I imagined it is like you have one budget that's like called you know my household
+37:05
+budget or whatever and then um you have envelopes within that right so your food
+37:11
+envelope your fun envelope your blah blah blah whatever you um allocate money
+37:16
+to let's see if I can run the command in there and that's really annoying but um there's probably a way to fix it but I'm
+37:22
+just going to roll with it here and run wasp db migrate dev from in here um and
+37:30
+it even tells me what name to name the database migration add envelope model i
+37:35
+will do that thank you okay and then I'll say okay
+37:40
+migration is done though and wasp start again if anybody
+37:46
+knows how to fix that so that the cursor uh embedded terminal also uses node
+37:54
+version 20 that would be great leave it in the comments okay cool so migration
+38:00
+is done um so it's saying yeah they confirm the
+38:05
+data migration okay so this is where we move on to the fun stuff that's just a couple database migrations no big deal
+1.4 - CRUD operations for envelope management
+38:13
+so now we've got the budget envelope database model but now it wants to implement this task with many other
+38:19
+subtasks which are the create operations so in the back end the backend functions
+38:25
+like things like hitting the server to create an envelope right it's defining an async function blah blah blah update
+38:31
+so it's already started doing that and you'll see there's an operations folder so let's go to it's created a budget
+38:38
+folder operations so here are our backend functions and we're getting those um our server side functions
+38:45
+without having to actually configure the entire server wasp is doing that for us we just have to define those operations
+38:52
+in the main was file and then it's create um creating the the function here
+38:57
+that um being defined so we've got things like create envelope get
+39:02
+envelopes etc and um yeah an action and a query right create envelope and get
+39:08
+all your envelopes so it's done that um great the create envelope and get envelopes queries are now defined this
+39:15
+completes step 1.4 um I don't know if it completes all of it does it um let's
+39:22
+accept all and let's go to the plan and
+39:28
+see plan um right we have create envelope
+39:36
+um get envelopes but we didn't do update and delete so I'm going to say it seems
+39:44
+like we still need to imple
+39:49
+implement the remaining remaining operations from
+39:56
+1.4 please do so got to be nice to your LLM you know you don't want the AIS to
+40:04
+get mad at you and get payback when the singularity comes or so I've been told
+40:18
+the funny thing is on stream or on video like a lot of times when it's doing um
+40:25
+LM's generating stuff um I'll go and do something else go and do some other work
+40:31
+come back see where it's at test things out keep going that's pretty amazing part is that we can offload a lot of
+40:36
+stuff i think it'll be only a matter of time before um the agents get good enough that you don't have to hold their
+40:44
+hand so long um so let's see okay so it says it's
+40:51
+done those things i'm going to accept all and just go take a look at the operations
+40:57
+folder we are getting errors as any type because maybe it
+41:04
+hasn't been defined yet or we have errors in our thing what's going on um uh something unexpected field off oh
+41:12
+okay so I know what the issue is it says off on the budget page it should be off
+41:17
+required right we could pass that in um here's the error uh where is
+41:24
+it this is off off
+41:30
+required where the hell is it u budget page yeah there's our our
+41:38
+culprit surprised we're not getting a um
+41:45
+uh restart i tried to restart the Wasp language server well we can pass that in
+41:51
+there i know what the issue is that we need to change it to required o required is true but just for the sake of um
+41:56
+demonstration purposes let's add it to the chat and say fix and it's going to find the culprit
+42:05
+and
+42:11
+um it's kind of helpful to to know your your project and and know your apps cuz
+42:17
+sometimes you can fix stuff faster than the LLMs
+42:22
+can humans aren't so dumb after all okay so now we should be able to
+42:28
+restart and it's restarted on its own nice okay
+42:33
+where were we i believe we were implementing the
+42:39
+other Yep get envelopes update envelope and delete envelope actions on the
+42:46
+server so great these are you can see they are
+42:54
+um validating if a user is logged in or not on the server which is great and I
+1.5 - budget UI & settings for cursor/rules files
+43:00
+think we can move to step 1.5 which is the budget UI this is a
+43:08
+basic budget UI um I think we've resolved
+43:16
+those oh there's a in budget page what do we got okay the components and budget
+43:22
+page uhhuh did it already start oh it already started implementing
+43:30
+those okay so did it do that
+43:37
+already we have No we don't have we have inlin errors here import shad cm components let's say
+43:47
+you know what i think this is also you know I don't like that new feature i actually kind of preferred that having the cursor rules file all in uh one file
+43:56
+and everything so let's just try that i'm going to always pass all these rules into context every time because I see a
+44:02
+front-end styling error so people Yeah select your your rule types in the MDC
+44:08
+to be always at least for this project it seems to be the better option so I'm
+44:14
+just going to go here and I'm going to do the same thing and I'm going to say fix and
+44:19
+chat um it looks like we've already do done handle create
+44:26
+envelope do we have handle update envelope probably not we just see update
+44:32
+no so those are the next ones we can handle in the
+44:37
+plan so we're going to move on to 1.5 next 1.4 is done
+44:44
+and then we'll be able to see some interesting stuff in our actual app for now a lot of it's just been database
+44:50
+models and backend functions um yeah so it figured out that not to reference
+44:56
+with aliases but um relative paths um that's just how I like to do it in
+45:03
+the project file um I know Shad CN likes doing it with the aliases but I'm a
+45:10
+weirdo
+45:21
+okay let's accept and I'm going to say let's move on on to plan step 1.5
+45:41
+okay so it's giving me two options we can implement the edit u delete UI
+45:46
+now or we can move to phase two so it says we've actually already completed the main steps of 1.5 but um I like the
+45:55
+idea of adding the um edit and delete so let let's do let's
+46:02
+go with option one so we have the edit and delete functionality of the envelopes
+46:08
+and I want the um edit and delete op the edit button to
+46:15
+open a modal um I think that'll just be nicer so I'm just going to say make sure
+46:20
+to open a modal dialogue
+46:27
+when click when the user clicks on edit and delete
+46:37
+reference um how modals are built in the app under
+46:47
+the I can refer it to the components um
+46:52
+directory directory okay so let's tell it to do that and let's
+47:01
+see what we get go check out the budget page and the cool thing about Wasp is
+47:07
+the budget page um you have to be authenticated to go there and it's at available at budget so if our app isn't
+47:15
+throwing errors then we can see it at /budget and we'll also tell it to add it
+47:21
+to the sidebar there okay so there's add a new envelope not sure how much I like
+47:27
+that but the whole point of this vertical slice thing is do start simple and and you know get the basic um
+47:34
+implementation down first and then improve upon it o over time so we'll just stick with that um let's go check
+47:42
+out what it's doing oh wow okay um it has a plan for
+47:47
+doing all that uh because I asked it to look at the confirm dialogue stuff which
+47:52
+is which are the modals and it's just going ahead and and going to town look at that
+47:58
+cool is it using the right stuff how does it look car title dialogue looks
+48:04
+great so let's
+48:12
+accept all right it's recompiling there it says phase one is now fully
+48:19
+complete besides the little bit of uh the few hiccups that we had on in the
+48:24
+beginning there it went pretty smooth so we're going to go to add budget let's just refresh let's say yeah I think
+48:30
+groceries is a good idea so groceries say add envelope oh and we get an issue what's
+48:36
+going on here no budget found okay so no budget
+48:42
+has been created so that should be interesting so we need a budget first i know that your budget has to be um your
+48:49
+envelopes have to be connected to a budget perhaps or maybe that's a bad implementation let's ask let's ask AI
+48:56
+let's ask Gemini let's say okay I'm getting an error on the
+49:06
+server that I've pasted into this chat
+49:14
+um I initially asked you to create a
+49:20
+budget from which there are envelopes or within
+49:30
+which for each user so that other users
+49:37
+can collaborate on that one budget
+49:44
+together now I'm getting this no budget found
+49:50
+error why is that and is this a good way to implement
+49:58
+this functionality okay that was a lot but thanks to everyone who sticking with
+50:05
+me here i know this is quite long we're almost at an hour it looks like about an
+50:16
+hour okay uh when we create the envelope the action runs it's looking for find budget
+50:24
+to find a budget first the existing user was logged in before we implemented
+50:31
+the on after signup hook okay that makes sense so it is trying to create a budget but we just didn't do it so um it's
+50:38
+saying test the current flow by signing up a new user consider the alternative approach which is don't automatically
+50:45
+create a budget on sign up and add functionality for user to explicitly create a new
+50:50
+budget um I don't know let's just try let's just try doing the uh new
+50:57
+user and where are we over here
+51:03
+um how can we log out there's no log out thing and we
+51:08
+don't have it set up in the thing first so let's have it create um or we can
+51:14
+Yeah we want some log out functionality somewhere so let's go back to agent mode and say okay I want to create a new user
+51:25
+but I realized there is no logout
+51:31
+functionality implemented yet can you put one in the nav user dropdown or yeah
+51:40
+something like that so you notice I kind of just
+51:47
+like I talk to it like I'm like a dummy um but the LMS are nice and patient and
+51:54
+they're smart enough to know what I want um so it's going to use the logout
+51:59
+function from Wasp client off and it's going to put it in the profile
+52:05
+dropdown drop down menu item log out so I don't know which one's the profile
+52:12
+dropdown but it did those edits so let's say accept and let's go over
+52:18
+here and go back to home is that profile that's log out yeah yeah cool we logged
+52:27
+out let's go to sign up man that one's getting me it's
+52:33
+sign-up and let's create dude@mail.com
+52:40
+and let's look in our dummy email provider for the verification link and we get it awesome and we want to go to
+52:50
+localhost 3000/lo and what was it
+52:58
+doemail.com awesome okay and let's see if we can create is it budget that the
+53:04
+thing was a new envelope called groceries
+53:10
+yay edit allocated amount let's say we want $500 a month for groceries okay
+53:20
+cool um I would like to see if it's like spent and stuff like that so let's just
+53:26
+ask the LLM right we've allocated 500 bucks but uh I'm going to wait maybe
+53:32
+during the transaction implementation phase then we will update the um the budget um the envelopes so so I'm going
+53:39
+to I'm going to tell it that i'm going to say I just noticed that the envelope doesn't show
+53:48
+uh spent and remaining amounts but I realize
+53:54
+we haven't implemented transactions yet can you
+54:01
+make sure that the plan will address thing
+54:07
+this and other things like this when we
+54:12
+get to that point and I'm going to reference the
+54:18
+plan here at plan.md and let's see what our nice
+54:23
+friend says
+54:36
+you've made a great observation you're absolutely right the current budget page only shows the allocated amount from the
+54:41
+envelope so um it says phase 2 manual uh uh uh uh to
+54:50
+explicitly address this issue I provise we add a new step okay great uh just to make uh the point this is one of my
+54:58
+things that I say like create and revise your PRD and plan like constantly test assumptions constantly ask this is what
+55:06
+you should be doing um otherwise you're going to run into issues later on so if you think something might not be uh
+55:13
+right or is a little bit off or missing you ask the LLM get it to update your your your plan or whatever code at the
+55:20
+moment you don't have to follow the plan strictly you know you can say okay like the logout functionality for example
+55:25
+like let's add it right now um you know it's vibe coding you should be vibing uh
+55:31
+so yes add that to the plan um I mean to be honest this is pretty
+55:37
+much how a uh implementation workflow would kind of look like if you were doing it on your
+55:45
+own um you might realize it and you would just do it manually um but now we're
+55:50
+just getting you know AI to take care of a lot of the grunt work for us so uh
+55:56
+let's see it says plan did it make the changes yeah cool
+56:01
+so we've got um that there um while we're at it I'm going to
+56:07
+say with this recent addition to the plan in mind can you go through our plan
+56:18
+and look for similar inconsistencies
+56:24
+think about our current implementation and
+56:34
+um yeah decide after ruminating about it
+56:40
+buddy we'll see what it gets so I'm just telling it look for similar stuff that we might not have thought about
+56:47
+um understand the goal review the recent change scan phase one so this is cool
+56:53
+this is something I did a lot in the previous um uh time i something that seems to work pretty well because you
+57:00
+know nobody's perfect not even the
+57:07
+LLM it's saying consistency check the plan
+57:14
+appears consistent in addresses one minor action we completed the work for 1.5 so we could update the boxes shall I
+57:21
+update the boxes i think we got that so it's saying um
+57:27
+yeah uh but we also allow editing if these are Yeah so the stretch goal allow
+57:34
+editing and deleting envelopes we got that now right can I delete it oh
+57:40
+beautiful funny money let's see add an envelope for funny money let's make it
+57:46
+we want We don't want to spend too much funny money rent cool i like
+57:53
+this this makes me feel like you know responsible okay with that it looks like
+58:02
+we can proceed to phase two
+58:08
+awesome all right we're ready to move on to phase two uh just one thing I did real quick before was I asked um cursor
+2.1 - transaction entity and prisma enums
+58:16
+or Gemini um how can I make node version uh 20 the default for all my um terminal
+58:22
+sessions and so it gave me the nvm alias default 20 command which I put in so now if I open a um new terminal window and I
+58:31
+do node version I see node uh version 20 so that fixes the issue where before we
+58:36
+were trying to run a command it would give us the node version error um so yeah hopefully cursor agent can run
+58:43
+commands in these little um embedded terminal windows that it has now so
+58:48
+we've got to restart our database now well didn't didn't use 20 here um we've
+58:57
+got to restart our database and we've got to start our app
+59:06
+and then we see on our plan phase two.1 is um well phase two is all about
+59:13
+the manual transaction um entry and assignment to envelopes so we're going to start with the manual and
+59:19
+then we can go to more um like bulk transaction imports and stuff like that
+59:24
+so let's go ahead and say let's implement phase 2.1 which is just adding
+59:32
+the transaction entity to our schema.prisma file uh so that we can start implementing create read update
+59:38
+delete operations or credit operations for transactions like create transaction get all transactions update and delete
+59:46
+transaction so cool it's going doing its
+59:52
+thing let's just go take a peek in schema.prisma see what's going on
+59:59
+okay so remember before it was commented out the transactions uh relation there
+1:00:08
+um so now we're slowly working our way through we've got a transaction enum um
+1:00:14
+so we'll see that here when we see the um transaction type is the transaction
+1:00:20
+type enum awesome okay let's see if it works now wasp db migrate dev awesome or before we were getting
+1:00:27
+that node error so if you run into that just make sure to
+1:00:33
+um uh use nvm alias uh what do we want to name our
+1:00:41
+transaction this is yeah we'll say add transaction model um yeah just remember
+1:00:48
+to um use nvm alias 20 i believe it was
+1:00:55
+cool so um database migration successful we've defined the transaction entity
+1:01:01
+this completes step 2.1 so let's go back to our plan looks good we're going to
+2.2 - CRUD operations for transactions
+1:01:07
+accept i say let's do 2.2
+1:01:12
+now and we should see in the source features transactions
+1:01:18
+operations.ts file so where are transactions maybe it hasn't created
+1:01:23
+that yet so it will probably create a new folder here under features hopefully and um uh first it is creating the
+1:01:32
+defining the uh operations in the main.loss file perfect and then we should see
+1:01:39
+that it creates a transactions
+1:01:44
+folder there we go with the operations so these are our backend server side
+1:01:50
+functions for creating and it looks like create and get transactions it's deferring the
+1:01:57
+update and delete but I say let's go ahead and do it why not okay let's just say accept all and
+1:02:05
+um I'll say let's implement the update
+1:02:10
+and delete functionality or um operations as well
+1:02:21
+okay so we've got create transaction we've got get transaction and hopefully by this we should have update and delete
+1:02:27
+we can see it being uh added to the main.loss file right
+1:02:36
+there now they will add implementations so we should be seeing that get added
+1:02:42
+to our operations folder great nice thing about um Wasp is that by
+1:02:50
+uh defining these operations in the main.wasp file um it uh Wasp will create
+1:02:56
+the types for these um serverside functions so we see create get delet uh
+1:03:03
+update and delete transaction and then we can define those um we can use those
+1:03:08
+types there add the input and um uh output types as well and then when we
+1:03:14
+use those on the front end those um operations on the front end they are fully um uh end to end type safe so
+1:03:21
+that's really nice and that also helps um guide the LLM okay so it looks like it's done uh let's just say okay so now
+1:03:30
+we've implemented all those and the next is the transaction form UI so I'm just
+1:03:36
+going to say okay let's go ahead and do 2.3 but also make
+1:03:43
+sure to implement the edit and delete
+1:03:50
+functionality on the UI via modals um let's see how well it can uh deal with
+1:03:57
+that request
+2.3 - transaction form UI
+1:04:04
+okay so it says it's going to create a component in the transaction form.tsx um
+1:04:10
+file that it should create over here soon in transactions with a date picker
+1:04:17
+um input and select type
+1:04:26
+it will trigger create transaction on submit so the only thing missing from the plan is the update and delete stuff
+1:04:33
+uh let's see if it gets that
+1:04:46
+right okay created a transaction uh modal
+1:04:53
+um let's see if it can deal with these import
+1:05:00
+errors uh let's see it doesn't seem to be recognizing the import errors i'll
+1:05:06
+wait a second and I'll just say um well we've got some here let's just
+1:05:12
+accept all and let's uh fix in chat
+1:05:22
+so it's assuming shad CN utils path um I changed those I because I put them in my
+1:05:28
+own um uh I set up the template a bit differently um but the nice thing is is
+1:05:34
+once I just pass the error to chat say fix in chat um it's able to do that so
+1:05:39
+that's great so it's looking in lib utils but um I changed it to CN because
+1:05:45
+that was all that was in there so hopefully it'll realize that or if not
+1:05:51
+we can change it ourselves okay so accept all and I think
+1:05:58
+I name that CN yeah so that's looking good and
+1:06:06
+um let's see go to the terminal and allow the app to
+1:06:14
+recompile and everything looks good so let's see what happens here we've got
+1:06:19
+that it's probably at transactions or transaction let's try it out now let's
+1:06:26
+check the main.woss file what route are we do we have now um where is
+1:06:31
+transaction do we have a transaction route it looks like it did not create a
+1:06:38
+transaction route search page budget page okay
+1:06:47
+so I'll just tell it I can't seem to access to find the URL for the
+1:06:55
+transaction route how can I
+1:07:00
+access it or do we still need to define
+1:07:13
+that okay so
+1:07:18
+um looks like it's added the transaction page here within the transaction regions
+1:07:24
+so let's go ahead and say accept and it created a route at
+1:07:33
+transactions path so we got an
+1:07:40
+error um internal error failed to resolve um let's
+1:07:46
+set pass that to the
+1:07:54
+chat so transactions page is
+1:08:00
+probably how's it being exported export function transaction form hey what's
+1:08:06
+that
+1:08:19
+yeah okay so it's saying transactions list
+1:08:26
+blah blah will go here and I can just say um please import the
+1:08:34
+components we got transaction form and transaction modal um
+1:08:42
+transaction form and into the transactions page
+1:08:54
+um I don't know if it needs transa the transaction modal but we'll just tell
+1:09:00
+it if necessary so please import the components transaction form and
+1:09:06
+transaction modal into the transactions
+1:09:16
+page okay so it's added them but it doesn't um it says will be
+2.4 - transaction list UI
+1:09:25
+implemented next so let's go to the plan and let's see maybe I'm getting ahead of myself uh transaction list UI oh okay
+1:09:34
+yeah so I was assuming I got a little ahead of myself there um let's tell it to implement 2.4 now so
+1:09:41
+I wanted it to do something that it had planned for 2.4 and I did not do that
+1:09:49
+correctly so sorry the LLM was following the plan correctly but I was
+1:09:56
+not let's see how it deals with that so that was pretty cool actually to
+1:10:01
+see where I'm trying to force the LLM to go um past the plan it knows we're still
+1:10:07
+on um uh what do you call it on section 2 what
+1:10:14
+was it 2.3 and I was kind of jumping the gun there
+1:10:20
+um and it implemented part of the transaction page but left it blank
+1:10:26
+because it was waiting for the the command to continue with 2.4 um so let's see what it's doing
+1:10:33
+there
+1:10:43
+um it looks to me like it kind of re So we had transaction form looks to me like
+1:10:49
+it's kind of doing it again in the page so it's not using the transaction form
+1:11:00
+um okay let's just say accept see what we get let me see if I'm correct in that it's
+1:11:07
+not using the transaction form where is the transaction form being used in the transaction modal oh okay maybe it is
+1:11:18
+um okay pretty sweet so we've got something nice here already let's do add
+1:11:24
+transaction awesome look at that got date picker from the components we have in our um the Shadzian admin let's give
+1:11:32
+it a description let's say uh we went to we bought pizza was 28 say $28 so there's an
+1:11:40
+expense um I don't have an envelope for that so let's call it um we went we went
+1:11:47
+to the bar and that's funny money cool and we've got nice expense badge it's in
+1:11:53
+red awesome we can edit it oh no it was $32 amazing okay so that seems to work
+1:12:00
+well let's see if we can delete one select an
+1:12:06
+envelope okay we want to delete that one absolutely sure sure awesome so all
+1:12:13
+that stuff's working um and I should have trusted the process there um
+1:12:18
+because the LLM knew exactly what it was doing was following the plan and it did it really well so uh let's move on to
+1:12:26
+section 2.5 it says "This completes 2.4 for for providing the UI for listing
+2.5 - budget page summaries & adding shadcn progress component
+1:12:31
+adding editing and deleting next step is 2.5 involves calculating and displaying envelope summaries on the budget page so
+1:12:38
+okay let's do
+1:12:48
+it so one thing I am noticing is that we're not updating the sidebar in here and stuff yet but that'll probably be
+1:12:53
+something later let's check our plan so after this it's collaboration on budgets
+1:12:59
+and envelopes um and then CSV import and mapping to envelopes so let's just follow the plan
+1:13:07
+um and we can update all the the the sidebar and stuff
+1:13:20
+later all right so cool we're adding the entity transaction entity to the
+1:13:26
+main.wasp uh um get envelopes query so what that means is that um WS takes care
+1:13:32
+of automatic um caching and cach invalidation on the client and uh in
+1:13:40
+order for the the um get envelopes function to have access to those
+1:13:47
+entities you just have to let it know that you want it to be able to act on those entities and through that you get
+1:13:54
+lots of cool stuff out of the box um so that was in get envelopes so we're in the budget operations let's see where
+1:14:01
+yeah so it has updated um get all envelopes to include
+1:14:09
+a summary says envelopes with summary so a calculated summary of what's going on
+1:14:14
+so the envelope info what's spent and what's remaining so that's pretty cool let's accept all and let's go see the
+1:14:23
+budgets page now okay we get an error maybe it's not done okay it hasn't done it's not done
+1:14:29
+compiling recompiling now it's
+1:14:35
+finished still get an error so let's look in the browser
+1:14:40
+console um response so no oh no budgets maybe it's budget that was my fault okay
+1:14:48
+so um I don't see anything on the UI yet let's go to the plan
+1:14:53
+[Music] um oh where'd my chat go that was this one
+1:15:01
+right okay um so it says "I've added the transaction entities forget envelopes
+1:15:06
+and main bot this should resolve now that the query returns the calculated amount the next step is to update the
+1:15:12
+UI." Yes so that's what we're missing yes update cool so we should see some stuff
+1:15:19
+happening on the budget page
+1:15:36
+so it will display the spent and remaining amounts and a simple progress bar for visual uh bar visual for the
+1:15:42
+spent amount relative to the allocated amount i like that there's probably stuff we could save for
+1:15:48
+the um the dashboard but let's do it now we can always move it
+1:16:02
+later okay
+1:16:09
+um so it's looking for a progress component do we have a loading component or something like that uh UI instead of
+1:16:19
+progress yeah it probably doesn't have a prog has a skeleton doesn't have a progress loader so
+1:16:26
+um let's try resume it said it had problem
+1:16:33
+connecting stay with me
+1:16:49
+okay so did it create a progress component or did it make its own progress
+1:16:55
+component are properly commented out in budget page let's see that where's progress let's look for
+1:17:02
+it um okay so it says progress component is added this completes step five 2.5 minus
+1:17:11
+the visual project bar which can be added later why don't we just do that now so uh let's go ahead and implement
+1:17:19
+the progress bar that component that is commented out in the budget page right
+1:17:27
+in at budget page before we move on to plan uh phase
+1:17:47
+three oh so it's saying it assumes you already added or will add the progress component to your SAS command um alo
+1:17:56
+there is one from shad CN
+1:18:05
+UI yeah so it's getting angry because it's not there um I'm surprised it didn't
+1:18:18
+say let's accept so it kept it commented out let's go ahead and and add it
+1:18:25
+so I know this is going to be a little bit tricky because of the um
+1:18:30
+uh the way that I set up the template with the components and the path aliases and stuff but let's just go for it and
+1:18:37
+we'll work out the errors and and we'll deal with it on the fly so npx shotc latest ad
+1:18:46
+progress please you chat uh okay so npn shad cx
+1:18:52
+latest add progress go for
+1:18:59
+it invalid
+1:19:04
+configuration
+1:19:10
+app so let me go back to Shad CN admin
+1:19:15
+and go to the Shad Shad CN admin
+1:19:22
+GitHub and let's look at their original components JSON and it's got
+1:19:30
+aliases is it the aliases that's missing because I removed that let's see what do we got that's
+1:19:37
+different yeah I think
+1:19:43
+so let's see if I add that and I try it again
+1:19:49
+what will it do there it goes guess I shouldn't have deleted that i mean we're not using the
+1:19:56
+aliases we're using relative paths but um I believe we just got it added in
+1:20:01
+there where's the progress
+1:20:07
+um ah funny it added it up there so let's try that again i'm just going to
+1:20:13
+mess around i'm going to delete that whole thing and I'm going to
+1:20:19
+say it gave us a suggestion that it's source
+1:20:24
+right so I don't think UI is under I'm sorry i don't think uh hooks hooks are
+1:20:32
+there lib I think I deleted utils and I put the stuff in lib so
+1:20:39
+maybe just leave that there for now let it let it do its thing let's add
+1:20:45
+progress where does it add it components UI yeah there we go okay
+1:20:54
+that wasn't too hard sorry about that um is looking for of course for the wrong
+1:21:00
+thing i want it under CN okay so that's probably something I wouldn't do next time i wouldn't mess
+1:21:06
+around with the the um uh with the aliases and stuff just to
+1:21:13
+make it easier to work with Shad CN i didn't think about that i thought we had all the components we needed but it's not a hard change right it's like that
+1:21:20
+was looking for the CN function in utils i know it's in CN because I changed it
+1:21:26
+you probably wouldn't have to have uh if you were doing your own project you wouldn't have that issue um but yeah
+1:21:32
+anyway let's go then and say okay I
+1:21:38
+imported the progress component now let's uncomment it out and use
+1:21:47
+it that should be in the budget page
+1:21:55
+so spent percentage did we uhhuh okay so it's already got a calculate spent
+1:22:02
+percentage um function right there i wonder if that
+1:22:09
+it's not too expensive of a calculation could be memorized maybe i don't know too much that much about that i mean how
+1:22:18
+often were we doing that call it's probably fine the way it is that's something we could ask um uh Gemini
+1:22:26
+about let's wait and see actually I will ask I'll ask about this um spent
+1:22:32
+percentage calculation once we're done okay so accept it and I'm just going to go ahead and say um add to chat and say
+1:22:41
+is this function worth memoizing to say to increase performance
+1:22:50
+in our app i'm not sure this is that
+1:22:55
+expensive of an operation on the client
+1:23:02
+think about the possible issues or
+1:23:08
+um think about this scenario and
+1:23:13
+present a rationale of your
+1:23:23
+decision all right interesting that looks like a very simple calculation my guess is it's going to probably say
+1:23:30
+that's not worth memorizing but who knows um yeah you're right to consider
+1:23:37
+performance but in this specific case spent percentage calculation using memo is likely not worth the added complexity
+1:23:44
+this calculation is cheap memorization has overhead focus on higher impact
+1:23:50
+memorizations and it's saying if this page did have performance issue i.e with thousands of envelopes the bottleneck
+1:23:57
+neck would be DOM rendering creating updating many card components um list virtualization or
+1:24:05
+memorizing the memorizing the card component itself would be far more impactful that's really cool um I didn't
+1:24:11
+know that so it's generally best practice to avoid optimizing until you
+1:24:17
+measure a real performance problem cool so that's great to know um so let's see
+1:24:22
+if that works uh let's go to our um thing and amazing we've got a cool
+1:24:28
+little a little bar there that's awesome so let's go to
+1:24:34
+transactions and um let's add we have one under funny
+1:24:41
+money so let's just add a bunch under funny money let's say we um we went to
+1:24:47
+the theme park and we spent like $300
+1:24:53
+And then let's go back to budgets oh so we went past our budget because budget money was only was only
+1:25:00
+100 bucks so let's make it 400 oh that's pretty cool i like that it
+1:25:06
+looks clean nice um the only thing I'm noticing is that we're missing some of these like nice uh nav bars and stuff
+adding sidebar items outside the plan
+1:25:13
+and I mean that's like a something we could probably optimize later but I kind of want to go ahead and do that now so
+1:25:21
+um I'm going to tell it to do that and also to add
+1:25:26
+um to the sidebar the budgets and transactions page great something I
+1:25:33
+noticed that I'd like to implement before continuing is that the
+1:25:41
+uh budget is it budgets budget and is it transactions okay the budget
+1:25:49
+and transactions roots
+1:25:56
+aren't are missing two things one the pages themselves do not have
+1:26:05
+the header [Music] slashnavbar navbar found on the
+1:26:17
+tasks um and what's it called
+1:26:22
+dashboard pages for example
+1:26:29
+and two um these roots are not accessible in
+1:26:36
+the sidebar can you make these changes
+1:26:41
+please okay so hopefully it looks at these um
+1:26:49
+pages here like tasks and it adds these nice sidebar um and stuff like that to
+1:26:55
+our budgets and transactions and also adds them here okay it seems to have stalled so
+1:27:02
+I'll say okay go
+1:27:09
+ahead so it's found the app sidebar so now it's going to add the
+1:27:14
+links to the sidebar along with some nice
+1:27:20
+um
+1:27:30
+icons okay so let's accept and go
+1:27:36
+look okay we've got budget and transactions okay it didn't do the add
+1:27:42
+the navbar it says these changes should and ensure they appear within the
+1:27:48
+application standard okay to see the sidebar update okay so it assumed that we would get the um the
+1:27:55
+the header navbar um but we didn't so I'm going to go back and say
+1:28:02
+um that worked great for the sidebar but these
+1:28:10
+routes still don't have the header/navbar that I'm seeing on the
+1:28:18
+tasks and users um pages can you
+1:28:25
+investigate EG tasks
+1:28:32
+um page and figure out which components
+1:28:40
+are being used for the
+1:28:46
+header/navbar and import them into the budget and let's just add those the
+1:28:53
+budget page and uh what was it transactions page
+1:29:01
+right cool so it's investigating the test page like we asked um and it imports a header and a
+1:29:09
+main component it imports search theme switch profile drop down um all this
+1:29:14
+stuff awesome so that's budget page so we
+1:29:20
+should see the updates on um budget page soon let's go check it
+1:29:27
+out nice there we go
+1:29:32
+perfect transactions nice so we should see there it goes yeah cool
+1:29:40
+i think there's still um some little headers there for uh tasks some some uh
+1:29:47
+inconsistencies in the in the UI there but we can work that out later i mean it looks pretty good for now we have this
+1:29:54
+as a uh as an example so I like it i really love this progress bar that I
+1:30:00
+made that's great um cool all right everything looks
+1:30:07
+good okay where were we what's
+1:30:13
+next i mean I can check the plan but we're vibe coding so we calculated that that looks
+1:30:21
+good um and we modified get envelopes query right and we updated the budget
+1:30:28
+page looks awesome so the first steps in phase 3.1 is to
+1:30:34
+define the collaboration um model in schema Prisma
+generating ai docs
+1:30:40
+um all right uh let's see before we move to phase three when
+1:30:46
+we start doing the collaboration and stuff um would it be cool to just create the docs in um uh the AI folder um so
+1:30:56
+that we have it and we can maybe reference it later i don't know if it's necessary but um can't hurt to do it so
+1:31:03
+before we move on to this let's create the uh phase one and two um docs for
+1:31:13
+LLMs and human uh
+1:31:18
+reference in AI oops
+1:31:25
+ai ai in a new docs
+1:31:35
+directory okay so first it's creating says yeah this is a good idea good idea to
+1:31:41
+document what we've built and so just gives an
+1:31:48
+overview of the stuff that we created the budget model
+1:31:54
+that we've got these actions how the actions are defined simply and it's all one like all
+1:32:02
+there in one document so it doesn't have to look through multiple pages which is nice so it has an good overview of
+1:32:09
+what's going on like for example that the on after signup hook is creating the
+1:32:14
+budget for them automatically when they create a new user and this is necessary for the collaborative feature so cool
+1:32:22
+we've got docs and it looks nice and we can pass those they're real simple uh
+1:32:28
+overviews of what we built so far and with that let's move on to 3.1 um yes
+1:32:35
+move on to it asked me do you want to start modifying step 3.1 so let's go
+1:32:40
+back to our plan cool so this is going our goal here
+3.1 - collaboration entity
+1:32:46
+is to enable users to invite others to view and or edit their budget so this is
+1:32:52
+great for collaborating with someone on a similar budget
+1:32:58
+um and this is something that when I I pulled um people on on online and uh
+1:33:06
+friends and co-workers what kind of app they want and a budgeting app was um a common response so let's run was
+1:33:14
+dbm migrate dev to add the budget collaborator um model
+1:33:25
+changes okay so it's we're going to call it
+1:33:30
+um how can I I was able to write in it before and say pop out okay so it's there um what
+1:33:38
+is it i'll just say add budget collaborator
+1:33:46
+model okay um
+1:33:52
+cool all right the background next step will be to implement 3.2 two which is W
+3.2 - CRUD operations for collaborator invite
+1:33:58
+wasp actions for inviting removing um and other
+1:34:06
+uh remove collaborator update collaborator things like that so we got 3.1 done um it looks like we're going to
+1:34:11
+do 3.2 in steps so I'll say okay implement the
+1:34:17
+invite [Music] collaborator
+1:34:22
+operation first this is where it could get tricky could
+1:34:27
+get hard because um you know this is also linked to uh how O works like if we
+1:34:33
+have an invite token and stuff like that um we need the signup page to accept the
+1:34:39
+um invite token um and I'm not sure that has planned it
+1:34:45
+here so let's see we're just going to run with it
+1:34:53
+just going to check the schema.prisma to see if m um ah we didn't accept the file
+1:35:00
+or did we accept
+1:35:07
+file okay invite collaborator action is defined let's look where would it do
+1:35:14
+that in but collaboration nice cool looks good
+1:35:21
+can't invite yourself got to validate the budget exists and the inviter is the owner like
+1:35:27
+it validate that the invite to user exists check if is already a
+1:35:34
+collaborator um so what it's doing is you have to be signed up first to get invited um that's
+1:35:43
+a more simple approach i mean we could always make it so that you can invite someone by email and then
+1:35:49
+um uh they can sign up and automatically be set up um but maybe we can do that
+1:35:56
+later right the whole idea with this vertical slice implementation is that we
+1:36:01
+do things um simple things first across the entire stack and move to more complex things so uh invite invite
+1:36:08
+collaborator action is defined it handles authentication preventing self invites validating the budget exists and
+1:36:15
+the inviter owns it validating the inviteee user exists uh cool
+1:36:23
+awesome so um let's uh yes let's do the remove collaborator action
+1:36:31
+next so if you're the owner of the budget and um yeah you want to remove
+1:36:36
+someone let's say your roommate used to be collaborating on the budget with you and they move out
+1:36:43
+then you can remove them okay so it says it's good let's see
+1:36:51
+good recompilation on file succeeded um what did we updated the
+1:36:57
+operations file so that we can invite and remove collaborator awesome um I do
+1:37:04
+not think we've got the UI going yet so that will probably be um yeah add UI
+1:37:10
+elements will be 3.4 so we won't even look at that we'll just keep accepting our way vibing our way through stuff so
+1:37:17
+let's next is update collaborator ro go for it
+1:37:28
+so I guess as the owner what you'll be able to do is um the collaborator on your budget you can give them maybe an
+1:37:34
+owner role or something else or you can downgrade them to just a viewer or something like
+1:37:45
+that update the role of the budget creator what is the collaborator role
+1:37:54
+enums collaborator role it can be owner editor or viewer
+1:37:59
+exactly cool all right ready to proceed for modifying operations for permissions
+1:38:06
+checks yes proceed go back to our plan so modifying
+3.3 - add role-based permissions to all operations & do a quick security check
+1:38:14
+operations for permissions means we're updating all the relevant uh operations
+1:38:19
+queries and actions so things like get envelopes create envelope create transaction will check context users
+1:38:26
+permissions via budget collaborator for the target budget and ensure that users can only affect budget envelopes they
+1:38:32
+have access to pretty cool that has to go across quite a few um actions there
+1:38:38
+so um or operations I should say cuz queries and actions and you can see it's
+1:38:44
+adding budget to um budget collaborator to each of the entities on the main.wasp
+1:38:51
+file get transactions
+1:38:58
+um so it's doing the queries first and now it looks
+1:39:05
+like it's going for the actions no no get envelopes and get
+1:39:13
+transactions so it's going for the queries first um now it's starting with the budget operations like create
+1:39:20
+envelope update envelope we'll need a helper function to check the user's permission level for a given
+1:39:28
+budget it's pretty amazing that it's doing all this i mean none of this is extremely complex stuff but um it's
+1:39:35
+quite detailed and there's a lot of features going on here and that it's able to get all this is um and do it for
+1:39:41
+me is like yeah pretty amazing if I were raw
+1:39:47
+dogging this I'd have a lot harder time right now would take a lot longer that's for sure
+3.4 - budget collaboration UI
+1:39:54
+okay so the final step is to build the UI on the budget or dedicated settings
+1:39:59
+page should we do it on the budget or a dedicated settings
+1:40:05
+page let's ask it but sounds good before
+1:40:10
+we move on what do you think is the best approach here
+1:40:17
+for managing the budget
+1:40:25
+and I'll just say what is for the best here the best approach
+1:40:30
+here for managing [Music]
+1:40:36
+collaborators the budget it page or a dedicated settings
+1:40:44
+page think about
+1:40:49
+your about the possible solutions
+1:40:55
+and provide rationale for the one you
+1:41:01
+think is best it helps us kind of understand like why
+1:41:08
+it's choosing that way um I like asking it always to do that um I could probably
+1:41:14
+pack that into a rules for AI um prompt like the global one oh res resend
+1:41:20
+that um and then I wouldn't have to ask it every time but you don't I don't need it every time so I'm not sure or maybe
+1:41:26
+create a rule that I could auto um that's probably a good idea
+1:41:33
+um let's try that while it's thinking so let's say oops
+1:41:41
+here seven possible
+1:41:48
+solutions thinking and I'll say
+1:41:55
+um think about a few possible scenarios or
+1:42:04
+scenarios or solutions to this
+1:42:11
+problem present the one you think is best suited to solve this
+1:42:20
+issue and provide rationale for why
+1:42:28
+you think it's the best one did I name that correctly should be MDC right
+1:42:37
+and then I say manual and I can mention it every time so I don't have to keep typing it okay
+1:42:45
+so back to the question it says I re recommend we proceed by adding the collaboration management UI elements to
+1:42:51
+the budget page using modals and potentially collapsible se sections to keep the layout clean i like that idea
+1:42:57
+let's do it use the components we've got already
+1:43:05
+in components UI
+1:43:11
+components all right so cool so later I can say possible
+1:43:18
+solutions thinking I can with the rule type being manual I can just say at
+1:43:24
+let's see uh it's called seven possible so yeah I can just add that
+1:43:29
+rule and add it and then I don't always have to type the same thing
+1:43:35
+there but now we're back on the budget page and we're [Music]
+1:43:46
+adding the collaboration UI ah so we actually probably in
+1:43:51
+collaboration page um or
+1:43:57
+users so we're adding a find user by email hey what is this
+1:44:04
+no off utils that's not right
+1:44:18
+okay so here it said get email under Wasp off that seems to be correct but it's
+1:44:28
+asking extension
+1:44:51
+so it's saying um we don't store the email on the user right
+1:44:58
+now although I believe we do right you can only go in with username where is
+1:45:04
+it um user hello user where are you ah
+1:45:09
+that's true we don't because Wasp takes care of the off in the background so
+1:45:15
+let's see let's just let it go ahead it's dealing with
+1:45:22
+errors okay so it looks like that'll definitely be an error that it didn't solve so
+1:45:28
+we'll just say fixing chat
+1:45:37
+the important note as noted in the code comments reliably getting the email for any arbitrary collaborate within a
+1:45:43
+standard WASP operation is tricky because the standard user entityd doesn't store email the current implementation uses a dummy email for
+1:45:50
+display purposes a production ready solution might require storing email directly on the user model
+1:45:56
+as discussed in the authentication MDC's recommendations
+1:46:04
+um and or creating a custom API route or displaying user ids or fetching um so
+1:46:13
+maybe we should just go ahead and store email directly on the user
+1:46:18
+model which means we'll have to you know log in new users and stuff so it seems
+1:46:24
+to have stalled here as well so I think I might stop it
+1:46:30
+um and let's stop it let's restore it to here what does it say
+1:46:39
+yeah I don't know if it made any changes but I'm going to say let's go ahead and
+1:46:46
+store the email directly on the user model as discussed in rule we can add
+1:46:51
+that rule i know that um rule four uh let's
+1:46:59
+see rule cursor rules hey cursor rules
+1:47:06
+number four um to do this will probably
+1:47:15
+require that we reset the database but
+1:47:20
+I'm okay with that and this will probably fix the
+1:47:26
+issue that we're having there with um finding the user email so what this is
+1:47:31
+going to do hopefully is when the user signs up um because W was takes care of
+1:47:37
+the O stuff for you in the background it has like an O user but um we can just
+1:47:42
+store the email there it goes we're going to create like a simple config function that will store the email on
+1:47:48
+the user directly so that we can access it easier than having to um constantly
+1:47:54
+you know um uh go deeper into the Wasp off stuff to
+1:48:00
+get the email
+1:48:15
+h it's still want It still is wanting to use the get email thing so
+1:48:20
+um I don't like this what it's doing so I'm going to reject
+1:48:26
+all and I'm going to stop that i'm going to restore it to here
+1:48:34
+um yeah let's reject
+fixing stubborn bug by passing docs url/snippets to LLM
+1:48:39
+that editing 15 files um operations find user email
+1:48:51
+reject still there find user by email i'm pretty sure let's go check out
+1:48:58
+the Wasp docs ourselves that off forgetting the
+1:49:06
+user accessing user
+1:49:17
+data it's on identities so user identities
+1:49:26
+um off identity so that's the off identity in the background uh that Wasp
+1:49:32
+makes getting off data from the user
+1:49:37
+object let's just maybe give the whole thing to it here and
+1:49:43
+say let's go ahead
+1:49:49
+um we've got the what is it called find
+1:49:54
+user find user by email
+1:50:00
+operation but let's just access
+1:50:06
+the offidentity right isn't that what it's
+1:50:11
+called o identity
+1:50:20
+entity signed up with email okay so there it is
+1:50:31
+let's see the off identity properties as
+1:50:38
+described in in this
+1:50:45
+example let's just copy that oops copy
+1:50:51
+this and then maybe it can figure it out let's see how it get
+1:50:58
+goes okay so I'm just pointing it like we see here
+1:51:07
+um we've got um yeah it's trying to do crazy stuff
+1:51:14
+because I know uh basically how it should work i can kind of stop it and um
+1:51:21
+tell it uh yeah here um let's look at the docs pass the URL
+1:51:27
+pass the example that we're talking about and let's see if we can figure it out um so it's going
+1:51:34
+to modify get um collaborators to return only the user
+1:51:42
+ID and then update budget page to reflect that and then it's saying we can now
+1:51:49
+proceed to implement the invite collaborator model modal using the find user by email query but it doesn't look
+1:51:56
+like it updated the find user by email query and so let's say okay first update
+1:52:03
+the find user by email
+1:52:13
+query all right what's going on here good point regarding
+1:52:24
+um so it's saying to get the email associated with an arbitrary user we needed this find user by email
+1:52:31
+query um so can't find revised recommendation
+1:52:38
+let's simplify get budget collaborators for now instead of trying to fetch and return emails we'll modify it to return
+1:52:44
+the ID and we'll update the budget to display the user ID for each collaborator instead of an email address
+1:52:50
+this is secure and avoids the complexities of fetching sensitive off identity data for other users
+1:53:05
+h but I I thought you can get the thing
+1:53:13
+um so when you find include
+1:53:21
+user okay why can't we do that
+1:53:28
+then I think this is what we need here so this looks like a good one i'm going to say
+1:53:35
+um okay but I've seen in the wasp docs that you can access the off
+1:53:46
+identities information by selecting it in a prisma
+1:53:54
+query like this can we not use this method to get
+1:54:03
+the email and display it email let's just say
+1:54:12
+that and if we can then we'll tell it to update the other stuff
+1:54:23
+clearly shows that was sets up the underlying Prisma relations in a way that allows you to traverse them using
+1:54:28
+nested include or select statements so yes we can use this method to fetch the
+1:54:35
+uh here's how it could work modify get budget collaborators and include the select
+1:54:42
+provider name email uh result for each collaborator the con
+1:54:47
+is the query is nested but um I don't care should we modify to use this yes
+1:54:55
+and yes we should also should
+1:55:03
+we update find user by email is this
+1:55:09
+being used anymore if it could be used should we
+1:55:16
+use it if so please update
+1:55:28
+accordingly so it's thought for 4 seconds big thinker let's implement fetching blah blah blah blah let's
+1:55:34
+update yes the find okay so it will update get budget collaborators and update find user by email it's still
+1:55:42
+valuable now fits email find us needed for the invite process where you type an
+1:55:47
+email address previous implementation had a llinter
+1:55:53
+error okay so it's updating the find user by
+1:55:59
+email nice so budget has been updated to display the collaborator's email address
+1:56:05
+fetched via the nested include it falls back to showing the user ID if the email is somehow null let's implement the
+1:56:11
+invite collaborator modal using the find user by email query awesome all right so
+1:56:17
+a little hiccup there takes reading through the docs a little bit um
+1:56:23
+but I think we'll get
+1:56:30
+it okay it says phase three is complete let's accept all and let's see if it is
+1:56:36
+if it works i don't think it is we getting an
+1:56:43
+error react router cannot read properties of undefined reading
+1:56:49
+viewer at budget page send that in i get the
+1:56:59
+following client uh client side
+1:57:04
+error
+1:57:09
+so that's probably an enum error right it's the enums not being
+1:57:17
+um yeah so it was trying to import server side Prisma client on the front
+1:57:23
+end so we could probably put those types in a more central place and um make them
+1:57:31
+compatible with uh um but that's something we can do later
+1:57:39
+to make it a little bit cleaner so we don't have types and enums all over the place um let's see we have recompilation
+1:57:46
+let's re refresh okay cool so now we have invite collaborators here took a
+1:57:51
+little while but um we need to search ah so it allows us to search for the user so let's see i think it was
+1:58:01
+vinnie.com user found see I don't like that it sends the uh user ID
+1:58:07
+back so let's tell it not to do that but you can assign RO and all this
+1:58:13
+stuff viewer um so we can say invite user um let me tell it to I don't want
+1:58:22
+the find user by email and
+1:58:28
+um what's it called and
+1:58:34
+invite collaborator
+1:58:40
+um functionality to return and display the
+1:58:45
+users's user ID for security purposes can you remove
+1:58:53
+that while you're at it add a section to the plan that
+1:59:04
+includes an extensive review of the code for
+1:59:10
+security
+1:59:17
+vulnerabilities and that's something I like to do is um you know constantly update the plan when I think run into
+1:59:22
+something like that where I didn't consider it before um but it's something that we should uh do later and um yeah
+1:59:30
+have add to the plan cool
+1:59:39
+so says still needs ID internally to confirm existence but we don't need to send that back to the user
+1:59:45
+right return only the email if user was found so I like that
+1:59:51
+now it's going to update the budget page and adjust the found user
+1:59:57
+type it's either going to find the user or not and since we're only using the email
+2:00:03
+method to log in there's not an email in the in the uh database and they won't be
+2:00:09
+there um they don't exist
+2:00:16
+right says having trouble applying changes on the budget page why is that i
+2:00:21
+don't see that i think it's okay
+2:00:33
+now okay edit should now be correct now let's add section to the plan for
+2:00:40
+security review and refinement nice i've made the changes okay let's go
+2:00:49
+ahead and accept let's see if this bad boy
+2:00:55
+works to test the invite collaboration stuff I'm going to sign up a
+2:01:04
+user oh found an error users error where is it oh an extra thingy curly brace i'm
+2:01:13
+going to sign up a user free um this is interesting i wonder if the user already
+2:01:20
+has a budget and you invite them to collaborate on yours what happens what
+2:01:27
+What does the plan
+2:01:35
+say it says we've completed all of phase three so let's just try it out i am
+2:01:40
+logged in with um I think it's dude at email no that one doesn't work it's this
+2:01:48
+one um let's try a new email let's go sign
+2:01:54
+up and let's make let's just call it [Music]
+2:02:01
+testermail.com password one two three let's go to get the verification
+2:02:07
+link okay
+2:02:13
+um let's go to login
+2:02:19
+tester atmail.com okay so we've got that user
+2:02:26
+they probably have no budget no transaction history and let's log out
+2:02:34
+let's log in with
+2:02:40
+dude@gmail.com let's see this dude has budget and transaction information i
+2:02:46
+want to remove that collaborator i want to invite
+2:02:53
+testermail.com search user found let's make them an editor invite user all
+2:03:00
+right so if we log out and log back in I'll be impressed if that works i
+2:03:05
+have a feeling that's not going to work let's go to budget i have too many
+2:03:12
+password popups oh it works and you can edit
+2:03:25
+it aha updating envelope fails
+2:03:31
+with let's see what happens here
+2:03:38
+cannot read properties of undefined when check budget permissions
+2:03:46
+at check budget permissions when
+2:03:54
+a invited collaborator
+2:04:00
+um tries to update the envelope of the shared budget it we get
+2:04:09
+this error and let me try and add that
+2:04:15
+rule possible solutions thinking which just to remind you says think about a
+2:04:21
+few possible solutions to this problem provide the one you think is best suited to solve this issue and provide a rationale why you think it's the best
+2:04:34
+one mhm and I think there's fundamentally a
+2:04:39
+problem with the collaboration logic so um let's
+2:04:52
+see so it says the budget collaborator is undefined so for an operation like
+2:04:58
+update envelopes have access to the thing they must be explicitly listed in the entities definition
+2:05:05
+grant entity access most likely uhhuh oh so it could be much simpler than
+2:05:11
+that okay let's see if that fixes it where is
+2:05:16
+this in um budget operations budget
+2:05:24
+operations should be update right update envelope
+2:05:35
+okay maybe that was simpler than we thought let's try it
+2:05:44
+again wow okay I'm quite impressed that that works so simply
+2:05:50
+um and that would have take me a lot longer to figure out on my own um cool
+2:05:56
+so just to check we can log out and we try with dude again who was the original
+2:06:04
+um owner of the budget and yeah there it is it's updated
+2:06:11
+correctly so tester so what I want to try now is sign up let's just try
+2:06:23
+asdfmail.com
+2:06:32
+close asdfmail.com
+2:06:39
+okay okay now it works
+2:06:51
+um okay okay so we got 200 um this is
+2:06:56
+the AFD user let me go back to
+2:07:06
+dude@email.com and let's go to budget and we've got tester is there what about
+2:07:14
+[Music] asdfmail.com user found this one can be
+2:07:21
+an editor as well invite user and then let's log out let's log in
+2:07:28
+with ASDF at
+2:07:35
+email now what does their budget look
+2:07:41
+like ah okay cool so it can keeps their old um
+2:07:48
+uh yeah their original envelopes and adds a new ones that's pretty cool
+2:07:54
+that's very reassuring um so yeah they can choose they can add
+2:08:00
+on to their own or um you know add their own envelopes but they also can
+2:08:06
+collaborate on the um um collaborate on the shared ones or
+2:08:14
+um they can edit their own envelopes um and that would be something
+2:08:20
+cool that we can share that maybe we show that these are shared envelopes right um we see the transactions um and that's
+2:08:30
+something maybe we can add to the plan so um add to plan
+2:08:38
+a an task to visually
+2:08:45
+um identify shared
+2:08:50
+envelopes i'll say shared collaborative envelopes on the UI so
+2:08:58
+that users with shared budgets know which
+2:09:03
+envelopes are being shared by other
+2:09:11
+users also show info like
+2:09:17
+whether No that's that's probably enough okay cool where were we that was a quite
+2:09:24
+a little detour there i think we are done with
+2:09:38
+3.3 yeah so it's just saying to do it now why don't we just do it now
+2:09:44
+then
+2:09:49
+cool okay i accept that and say let's implement those visual
+2:09:57
+distinctions and let's add the cursor rule which is think about different possible
+2:10:05
+scenarios and pick the best one and give rationale
+2:10:10
+for why you think it's the
+2:10:18
+best so it's going to modify probably the UI needs to know for each envelope
+2:10:25
+displayed whether the currently logged in user is the owner of the envelope that it belongs to analysis of the
+2:10:30
+current data the problem the envelopes data fetched by get envelopes does not
+2:10:35
+currently contain who owns the budget we can't directly
+2:10:40
+compare because envelope budget is included possible modify client side so
+2:10:46
+what does it say it says option one modify get envelopes is the most robust way so there it goes it's going to
+2:10:54
+modify get envelopes to include the budget
+2:10:59
+uh user ID then it will compare to see who is the the user IDs to see who is
+2:11:05
+the owner that makes
+2:11:11
+sense cool let's accept all and go check it out cool there you go that's really nice
+2:11:19
+so now we see that it's a shared one um because they aren't the owner they're
+2:11:25
+the owner of this one ASF so they see that one and just to make sure that we
+2:11:30
+don't have some crazy stuff going on if I log in with uh dude who is the owner of those initial two envelopes
+2:11:38
+[Music] um then I shouldn't see anything and I
+2:11:44
+shouldn't see the asdf one awesome and we see the tester there cool and that
+2:11:50
+looks pretty good um seems to work pretty well let me
+2:11:55
+just log out and let's try to create a new user to make sure nothing crazy is
+2:12:01
+going on and we'll call this um new user
+2:12:08
+hello@gmail.com sign up verify the
+2:12:13
+link go to log
+2:12:21
+hello.com okay okay no envelopes created nothing awesome maybe we should rename
+2:12:26
+that to Hello
+2:12:32
+cool transactions no transactions
+2:12:37
+yet hey I was able to add a transaction before now I don't see the add transaction button so let's go ahead and
+2:12:43
+fix that before we move on why don't I
+2:12:49
+see add transaction
+2:12:55
+functionality in the transaction page
+2:13:05
+right um I've heard about before where people say that um it'll just kind of delete stuff and change stuff without
+2:13:11
+you asking and um that's one of the downsides of
+2:13:25
+vibing i mean the plus side is that we have a pretty nice looking functional
+2:13:32
+um app pretty quickly i mean what is it taking a couple hours
+2:13:37
+so with a few more hours you can do quite a
+2:13:55
+lot handle add transaction what did it do modal button
+2:14:04
+exists i don't see it am I crazy where's the add transaction
+2:14:11
+button you full of crap let me go to the transactions
+2:14:21
+page add transaction plus circle transaction modal
+2:14:27
+okay but where's the where's the Okay there's an add transaction there is an
+2:14:34
+add transaction button within the
+2:14:41
+transaction modal but not on the
+2:14:48
+main page slash form
+2:14:54
+no
+2:15:00
+wonder I swear we had that
+2:15:07
+before the modal which contains has its own submit button at the bottom there should also be an adaction itself this
+2:15:14
+is the button that's intended to open the modal
+2:15:22
+so it says uh could you please double check the top right area of the transaction page next to the title the add transaction button with the icon
+2:15:29
+should be visible there clicking that button should open the modal
+2:15:38
+what this is the button rendered on the main page i don't see it where
+2:15:45
+are Oh there it is why is it obscured
+2:15:53
+uh-huh it is there but it's obscured by
+2:15:58
+the header navbar is there a padding or margin styling
+2:16:09
+issue we have something like that with the budget oh yeah we have the same thing for the budget it's blocked the
+2:16:15
+the um Look at that yeah my budget envelopes
+2:16:22
+haha funny i'll make sure we fix
+2:16:33
+that the header fix component likely takes uses fixed or sticky
+2:17:02
+let's see budget we're on transactions page right it's saying something about a fixed
+2:17:08
+property um if I get rid of it that's all it is okay so cool well it
+2:17:16
+set me in the right direction um surprised uh was fixed that's all it
+2:17:22
+takes to fix it cool then we get a little dingy dingy
+2:17:29
+dingy i like the way the tasks the styling on the tasks looks
+2:17:35
+nicer but we can fix that later think of got to cool okay anyway now we have the
+2:17:40
+add transaction and we can add transaction expense it was in hello and
+2:17:48
+we see it in our budget spent oh we didn't add any budget
+2:17:55
+too cool okay great um where were
+2:18:00
+[Music]
+2:18:05
+we cool so we've got the visual indicators for shared um envelopes
+2:18:12
+within a budget and next the phase four is um CSV import and mapping to envelopes so the goal is to allow users
+2:18:19
+to upload a transaction data via CSV file and map imported transactions to
+2:18:25
+the correct envelope cool before we do that let's
+2:18:31
+have it create the doc so let's say before we move on let's create a
+2:18:39
+um doc for phase three in
+2:18:45
+docs in AI
+2:18:55
+docster okay at this point to this is probably the point where I would
+2:19:02
+um start a new chat um because now we have the the context
+2:19:08
+of the docs and stuff like that um so we don't need all this chat context to be in there um and it's kind of getting
+2:19:15
+slow so I would assume that this is a point a good point to um move on to a uh
+2:19:23
+yeah see it's saying there start new chats for better results so um it's even letting us know that that's what we
+2:19:29
+should do and now it's saying we're ready to move on um where did it do it
+2:19:34
+collaboration cool summarizing chat context so I'll let it finish doing that
+2:19:41
+before I accept even though it looks like everything's good to go
+2:19:57
+and it's taking a long time i'm getting impatient here cool
+2:20:06
+um yeah it's planning next moves blah blah blah blah
+2:20:12
+blah okay we're ready to start phase four saving
+2:20:19
+action okay so it wants to do that um I want to slow down because I want to move
+2:20:24
+to a new chat um so let's say let's go first to the
+2:20:31
+plan does it in the plan it says it wants to use pop-up parse I guess yeah
+2:20:36
+so I'm going to um stop it here i'm going to accept all
+2:20:41
+changes and I'm going to stop it
+2:20:51
+um so we've accepted the collaboration right
+2:20:56
+cool and I'm going to do a new chat and get rid of that keep the plan
+2:21:03
+in there okay so they seem to be done with 3.4 we did 3.5 forgot to mark these off
+2:21:11
+all right cool um I am going
+2:21:16
+to do get add all get commit m phase
+2:21:23
+three collaborate collab
+2:21:30
+collaborate get push origin or what branch are we
+2:21:35
+on get push what was the remote get push origin
+2:21:45
+video all right cool didn't take a little breather here it's been an hour
+2:21:50
+uh almost 2 hours of uh vibing and before we move on to phase
+2:21:59
+four okay so I kind of decided that um I'm going to put off phase 4 um not do
+4 - adding dashboard summary visuals
+2:22:06
+it for the video because it's already gotten pretty long and uh what I'd prefer to do is kind of clean up this
+2:22:11
+dashboard and actually get it to show us some um stats here so let me log in with
+2:22:16
+my other user um that has more going on
+2:22:22
+and right because they have yeah like this stuff and
+2:22:28
+collaborators and stuff so we want some of these stats to be shown on the dashboard here so what I'm going to do
+2:22:33
+is um I'm going to say instead of moving on to plan phase 4 let's add some useful
+2:22:45
+graphs to the dash let's say dashboard page of
+2:22:54
+the app think about some
+2:23:00
+possible graphs or um visuals to show here based on our
+2:23:09
+envelope and our envelopes
+2:23:15
+transactions and collaborations functionality
+2:23:21
+give me a few suggestions of what you think will
+2:23:29
+be the best things to display here after thinking about your
+2:23:37
+answer okay so after it gives me some possible
+2:23:44
+suggestions um what I'm going to do is I'm going to tell it to use these components here and
+2:23:49
+the charts that it's got in there as um as a guide and
+2:23:54
+um base it off that so it's saying expense
+2:23:59
+um income versus expense for the current period a simple bar chart with a summary
+2:24:05
+uh pair of summary or a pair of summary cards comparing total income total expenses for the current month spending
+2:24:11
+breakdown by envelope and envelope status
+2:24:16
+progress let's do let's do the income versus expense
+2:24:24
+overview because we have the envelope status and progress on the budgets page let's do income expense overview and
+2:24:30
+spending breakdown by envelope um let's do the first
+2:24:39
+two use the let's see what we got in there we've got um on the dashboard
+2:24:47
+page we have some components with an
+2:24:52
+overview and that's a bar chart using recharts
+2:24:58
+um use the overview
+2:25:05
+component as a guide [Music] to
+2:25:12
+help develop uh use the overview component as a guide yeah just this
+2:25:17
+should be enough because it already set up here you know we have to choose whether we do
+2:25:23
+recharts chart.js blah blah blah and because the overview is already using um recharts then that should help
+2:25:31
+and so let's see what it does i saw before that it's going to
+2:25:36
+create some new um operations so it's going to make a get accessible budgets
+2:25:43
+query cool um and it's going to define dashboard
+2:25:50
+aggregation queries which is the those are like dashboard totals and get spending by
+2:25:55
+envelope i like it and then it's going to create some front-end components which are bar charts and a pie
+2:26:01
+chart and should be pretty
+2:26:10
+good once we have that stuff in order
+2:26:15
+seeing an update the dashboard page um we'll go ahead and we'll try and just deploy this app um for deployment we'll
+2:26:24
+probably have to um add a real email sender we can't use
+2:26:29
+the dummy email sender that we've been using in development um so it might take a little while but
+2:26:35
+uh should be worth
+2:26:41
+it okay
+2:26:47
+um now I'm not sure if it applied these um these changes or not that's just odd
+2:26:56
+says the setup and
+2:27:02
+it I'm just going to say go ahead and implement that implement those
+final app state w/ nice dashboard summaries
+2:27:09
+changes funny that I didn't do it there um which I
+2:27:15
+find surprising i mean it created all the
+2:27:20
+things and I don't feel like going through and yeah manually clicking apply to all
+2:27:28
+of them so let's have it work it itself
+2:27:41
+deleting the old overview so it made a
+2:27:47
+envelope spending breakdown and an income expense
+2:27:54
+overview oh I need to accept the delete file um thingy
+2:28:01
+cool i see some import errors
+2:28:14
+we have recharts installed so we don't need to do that these I know are false and I figured that out right away we do
+2:28:22
+have an error here which is budget and I don't I think it went ahead and deleted
+2:28:29
+which file is that that is update collaborator role so I'm not sure why it changed that
+2:28:36
+but I'm going to put that back i don't think um revert this change
+2:28:43
+so I think that was what's was causing the issue there and let's see
+2:28:53
+um SDK fail build fail okay so we're getting a lot of
+2:28:59
+errors now um where are we getting them from
+2:29:09
+from the index mhm
+2:29:15
+okay one of them is this one's that we can just tab through those let's go down
+2:29:22
+here budget ids type string is not assible to type
+2:29:29
+number okay okay so that means this one those we tab through those type
+2:29:36
+string is not assignable to type number so this should be string
+2:29:44
+right h so I guess the get spending by
+2:29:52
+envelope expects a number array
+2:29:59
+so let's ask it what the best way to deal with this is fix and
+2:30:06
+chat i know we can cast strings as
+2:30:13
+numbers let's see um seems budget ID field is likely a string perhaps a U ID
+2:30:20
+we could look that up is budget ID where are
+2:30:26
+budgets yes this is a UYU ID so it's going to change that to
+2:30:33
+string and that to string okay so it just is expecting to take a
+2:30:40
+number but because budget ID was a UYU ID which is a long string of
+2:30:45
+um um characters and
+2:30:52
+numbers that should fix the issue now let's see what happens when it builds
+2:30:57
+and recompiles some more
+2:31:03
+errors mhm okay not null and it says
+2:31:08
+null is not assignable to type
+2:31:18
+string let's fix in chat i've actually never seen this
+2:31:23
+before this not null um definition here in a
+2:31:29
+Prisma group by [Music] sum where envelope
+2:31:45
+ID okay but it doesn't solve this
+2:31:50
+issue envelope ID is string So huh
+2:32:19
+undefined okay
+2:32:24
+apply what do we
+2:32:34
+got request error loading budget info request failed with 404 HTC loss error
+2:32:42
+404 object okay at failure key
+2:32:49
+so we get this error on the
+2:32:57
+client after those changes I unfortunately get this error on the
+2:33:09
+client probably not finding a um budget ID or something like that so
+2:33:17
+let's see how it deals with this
+2:33:26
+is the function path get accessible details it's asking me questions so get
+2:33:31
+accessible budgets here is collaboration
+2:33:39
+operations get accessible budgets yeah budgets owned by user
+2:33:47
+or budgets where the user is a collaborator
+2:33:56
+okay could you please confirm you have restarted the server and check the server logs for any errors when 404
+2:34:04
+happens restart like they
+2:34:13
+ask ah interesting okay so we've got um
+2:34:19
+income no income versus expense so let's go check and if we add an income let's
+2:34:25
+say some income [Music] um we'll add
+2:34:33
+a,000 say income for that whatever nice
+2:34:38
+so we added a,000 bucks so we've got income verse expense for the current month pretty good and we've got money
+2:34:47
+spent funny money do we not have any envelopes yes so no money was spent on rent so if I go to transactions and I
+2:34:54
+add a transaction and I say uh rent that was
+2:35:00
+600 rent at transaction so my budget I see I spent
+2:35:06
+all my money on rent i went over on my funny money and my dashboard should
+2:35:12
+reflect that that so majority of my spending is on rent the rest is on
+2:35:18
+funding money and I've got uh this income versus expense for the current month they're pretty
+2:35:25
+close um right so maybe I could do something with the rest of this where
+2:35:32
+for example we use some of these cards here um I kind of like
+2:35:40
+these indicators there um but I think you know what this
+2:35:46
+is pretty good for for for now this kind of um shows that we're able to do it let's
+2:35:53
+just go ahead and um repurpose those cards and get rid of recent sales so
+2:35:59
+nice it works now um but on dashboard
+2:36:06
+page I want to repurpose some of those
+2:36:13
+cards with general info such as total income total spent and total
+2:36:24
+remaining or something like that remove recent sales too so we'll remove the
+2:36:32
+recent sales and I will fix up some of these
+2:36:51
+right okay so a lot of the
+2:36:56
+um we have functions already we have operations already that get that data for us so it's easy to pass to those um
+2:37:04
+uh cards there i mean we could go deeper and actually make it a little nicer but
+2:37:10
+I mean I think that's pretty cool that looks pretty nice what it just did there um made it very simple for us then of
+2:37:16
+course you can jump to your budget where you see your collaborators and you see your transactions
+2:37:22
+um I like it quick view of what you have remaining this month
+2:37:28
+and yeah really nice um vibe coded i'm going to leave the other stuff
+2:37:34
+in place for now i mean none of this perfect um we can keep using this process uh to refine everything um I
+2:37:42
+think that's good enough for the uh purposes of this video so I'm going to
+5.1 - generate a deployment plan from Wasp docs URL
+2:37:47
+um make a new chat and I'm going to say
+2:37:53
+um I'd like to deploy this app now using let's do the docs
+2:38:01
+wasps CLI deployment methods um can you lay out a deployment
+2:38:11
+plan in the AI folder um because yeah AI is making it
+2:38:19
+um and title it deployment
+2:38:27
+plan.md where we go through where we outline all the
+2:38:33
+deployment steps necessary so Wasp
+2:38:39
+has some cool deployment features um and like you can deploy using a um
+2:38:47
+single command with um uh the Wasp CLI and right now you can do that with
+2:38:55
+fly.io so we'll probably have to go set up a fly account and stuff like that um hopefully the plan will tell us that so
+2:39:02
+it's just going through the docs and it's going to tell us what to do um so where did it make the deployment
+2:39:09
+here's the deployment plan let's check it out accept file so you need an account with Fly.io
+2:39:17
+requires a credit card um I know that they don't um charge you if you're under
+2:39:22
+$5 so you install the Fly Ctl CLI we've already I already have done that um this
+2:39:27
+gives you the link to how you can do it you log in with it and then we need to
+2:39:33
+follow these steps so while CLI simplifies deployment to a single command
+2:39:39
+[Music] um so we need to choose app region run deployment command blah blah blah blah
+2:39:44
+so we will do that um but I know before we can deploy we need to move off the dummy
+2:39:51
+email provider and move to a real one um so let's go ahead and do that now so
+2:39:59
+here we're using dummy email provider in production and that was just logging like all the emails um to the
+2:40:07
+console um but we want to use a real one like send grid or something okay so um
+5.2 - using SendGrid email sender for production build
+2:40:13
+in the was docs for the email sender that we've been using been using the dummy email sender which is just a a
+2:40:19
+placeholder in um development that logs all the emails that would be sent by a
+2:40:25
+real email sender to the console so I just quickly went ahead off uh camera and I got the um Send Grid uh I logged
+2:40:35
+into my Send Grid account and got the API keys and put them into.server with under the send grid API
+2:40:42
+key um environment variable and yeah you can do the same and um uh yeah this is
+2:40:51
+env.server.example you'll want av.server file put your Send Grid API key in um and change the email sender to
+2:40:59
+provider send grid default from and be your um email that you use um for that
+2:41:08
+uh send grid account um so you'll see the same thing in here from field um so
+2:41:14
+let's uh um let's try it out uh I've got to restart the um oh import main
+2:41:23
+what's going on import main from um I'm missing something
+2:41:29
+here oh I got two uh no that should be right where I was going import main root
+2:41:38
+component client server unexpected token root
+2:41:49
+component oh okay i don't know what was going on there uh maybe missing a curly bracket or something okay
+2:41:58
+so start the app again and just to see if this um API key is working I'm going
+2:42:06
+to try and register a new user so we're logged in with probably
+2:42:15
+dude or whatever go to sign up and we're going to do um
+2:42:25
+guymail.com um or let me actually use my real email
+2:42:37
+address budget created for new user okay let me go to my email address
+2:42:45
+um off camera cool and there's my real email address and it says "Yeah you've
+2:42:51
+got an email." So I'm going to verify it um again off camera
+2:42:59
+here go to my email address
+2:43:04
+and it gave me a link that I'm going to click verify
+2:43:11
+email cool so I went to my Gmail account clicked on it and it verified so now I
+2:43:17
+should be able to log in with that uh real actual email address so we know
+2:43:24
+that it is [Music] working cool and here of course um we
+2:43:32
+have no spending data for the moment because we have no budget and stuff like that but cool yeah that worked um so
+2:43:39
+that was a prerequisite to be able to actually deploy the app um because um Oh
+2:43:45
+there's my API key i'm going to have to get rid of that um because
+2:43:56
+um yeah with the dummy email provider you can't deploy to production so we had
+5.3 - have cursor deploy to fly.io for us
+2:44:02
+this deployment plan that we made um and I'm going to go back to the docs and
+2:44:08
+I'll just say um how can I check if I'm logged in with the fly
+2:44:16
+uh ctl it says here you have to ini install the flyct ctl and log in so let's just uh run that
+2:44:25
+command cool so it shows I'm logged in i've already done that before and it's
+2:44:31
+fly off who am I um so now I'll just ask it what's the next
+2:44:37
+um uh prepare the next command for me
+2:44:42
+according to the um deployment plan
+2:44:50
+so I'm just going to have it you know create the um uh unique name blah blah
+2:44:56
+blah the region so uh it's saying what base name would you like to
+2:45:02
+use for your application um I like this one yeah envelope budgeting app um yeah
+2:45:08
+say I like the name and let's go with Miami so you need
+2:45:15
+a name and a region to deploy the app in um so it's running a command it's going
+2:45:22
+to check fly so it's got my personal and it's got shared um which organization
+2:45:28
+would you like i'll say personal okay so it's prepared the
+2:45:35
+command wasp deploy fly launch the name of the app uh in Miami and to the
+2:45:41
+personal org if you don't have different organizations it'll just you don't need that um tag but that's the great thing
+2:45:46
+about having it put out this uh plan and then having it make the commands for you so let's run
+2:45:52
+it now of course you would have to like it says here you'll have to you know go to fly.io and create account if you
+2:45:59
+don't already have one um but as you can see here it's building
+2:46:06
+the app this might take a while
+2:46:12
+press any key to continue
+2:46:21
+continue okay so we popped out the terminal um and then it's running
+2:46:33
+here okay it says my app was deployed finally so let's open up the link and
+2:46:40
+see what we get and how's it
+2:46:47
+going see a loading spinner
+2:46:55
+here log in to probably to sign up we need I know we need to add the environment variable so
+2:47:03
+uh no match signs up sign
+2:47:10
+up for free thingy so let's go ahead we've got the We see
+2:47:18
+the client there it's doing a loading spinner probably because it's not able to find the um send grid API key um so
+2:47:25
+let's ask uh the agent according to the Wasp
+2:47:32
+docs how do I add a an environment variable via the
+2:47:45
+CLI so yeah I'm going to go access that envir environment variable on camera but
+2:47:51
+of course I'm going to delete this later so you goons don't have access to
+2:47:56
+it okay so here we go um let's just
+2:48:04
+say can I change that no let's put it Well it's there so let's just copy that
+2:48:13
+let's put it here and it's going to be Oh
+2:48:21
+so paste it again and get the send good API key paste that in
+2:48:37
+there okay um let's go back to our app
+2:48:44
+where was the URL again
+2:48:58
+here let's see what our issue is okay cool that I think it's getting the the API key now so we'll go to sign
+2:49:09
+up and put in my real email address again
+2:49:18
+okay and then it sent an email i'm going to go off camera and check my email here and I've got
+2:49:25
+a email okay so email has
+2:49:30
+been verified as you can see here so I'm going to go to
+2:49:36
+login and I'm going to put in my email
+2:49:46
+and we are logged in baby all right so let's create a budget fun
+2:49:54
+uh household stuff awesome we have a deployed
+2:50:01
+um semi-finished um collaborative budgeting app let's see
+2:50:09
+if we can add some transactions nice i'll just say coffee
+2:50:14
+and I like coffee so I'll spend 100 on that cool all right and
+2:50:21
+um everything seems to be working pretty well I would
+2:50:28
+say save changes cool and go to our dashboard and we see our income expenses
+2:50:35
+things are looking good total income remaining this month um Oh yes because I didn't put any income in so it took a
+2:50:42
+while i mean it's not like everything is done for you you kind of need to know
+2:50:48
+what you're doing but you can definitely vibe code your way and get a lot done um
+2:50:54
+a lot faster um and than you could in the past create some complex apps
+2:51:01
+um and yeah this workflow I think definitely
+2:51:06
+um is one I will be sticking to um I even noticed that adding like stuff like
+2:51:12
+this or maybe adding like this solutions possible solutions thinking idea um but
+2:51:19
+having these like set of cursor rules that you can either automatically um or manually um inject into the
+2:51:27
+context is really helpful um having a detailed PRD and plan that you can go
+2:51:33
+through is super helpful um starting on top of a really nice component library
+2:51:38
+is very helpful using a uh full stack um framework with batteries included gets
+2:51:45
+you um you know a lot further than usually would so that's it in a nutshell
+2:51:52
+um I know this is long but I hope it provided some um use somewhere within this video you
+2:52:00
+found something useful or uh you've learned something uh let me know in the comments um anything that I might have
+2:52:07
+missed um stuff that you think is improves this workflow or or things I'm
+2:52:13
+overlooking um yeah these tools keep improving keep getting better so this video might even be obsolete in a few
+2:52:20
+months who knows but anyway um that's it for now signing off enjoy the vibe
+2:52:26
+coding
