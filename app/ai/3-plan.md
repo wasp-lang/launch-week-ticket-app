@@ -1,9 +1,9 @@
 # Wasp Launch Week Ticket App – Vertical Slice Implementation Plan
 
 ## 1. Project Setup & Planning
-- [ ] Review and update project dependencies if needed
-- [ ] Create a new feature directory for the ticket app (e.g., `src/ticket`)
-- [ ] Add placeholder assets (e.g., Da Boi fallback image)
+- [x] Review and update project dependencies if needed
+- [x] Create a new feature directory for the ticket app (e.g., `src/ticket`)
+- [x] Add placeholder assets (e.g., Da Boi fallback image)
 
 ## 2. Auth: Enable GitHub Login
 - [ ] Update `main.wasp` to enable GitHub Auth (add provider, set up env vars)

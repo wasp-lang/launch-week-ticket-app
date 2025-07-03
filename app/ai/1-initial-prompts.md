@@ -43,5 +43,4 @@ Success Criteria:
 ### Plan prompt
 
 From this PRD, create an actionable, step-by-step plan that we can use as a guide for LLM-assisted coding. Before you create the plan, think about a few different plan styles that would be suitable for this project and the implementation style before selecting the best one. Give your reasoning for why you think we should use this plan style. Remember that we will constantly refer to this plan to guide our coding implementation so it should be well structured, concise, and actionable, while still providing enough information to guide the LLM.
-
 Also, when you write the plan make sure to use checkboxes for tasks, so we can track our progress easily.
