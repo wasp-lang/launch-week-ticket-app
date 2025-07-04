@@ -8,8 +8,8 @@ import Footer from './components/Footer';
 
 export default function LandingPage() {
   return (
-    <div className='bg-white dark:text-white dark:bg-boxdark-2'>
-      <main className='isolate dark:bg-boxdark-2'>
+    <div className='text-primary dark:text-white dark:bg-neutral-900'>
+      <main className='isolate dark:bg-neutral-900'>
         <Hero />
       </main>
     </div>

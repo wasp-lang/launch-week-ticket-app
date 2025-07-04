@@ -39,7 +39,7 @@ export default function App() {
 
   return (
     <>
-      <div className='min-h-screen dark:text-white dark:bg-boxdark-2'>
+      <div className='min-h-screen bg-background text-primary dark:text-white dark:bg-neutral-900'>
         {isAdminDashboard ? (
           <Outlet />
         ) : (

@@ -12,7 +12,7 @@
 
 ## 3. Landing Page
 - [x] Add prominent CTA: "Log in with GitHub"
-- [ ] Route unauthenticated users to the landing page
+- [x] Route unauthenticated users to the landing page
 - [ ] Style the page to match the app's look and feel
 - [ ] Remove Login and Signup pages
 

@@ -20,8 +20,8 @@ module.exports = {
         bodydark: '#AEB7C0',
         bodydark1: '#DEE4EE',
         bodydark2: '#8A99AF',
-        primary: '#3C50E0',
-        secondary: '#80CAEE',
+        primaryBlue: '#3C50E0',
+        secondaryBlue: '#80CAEE',
         stroke: '#E2E8F0',
         // gray: '#000',
         // graydark: '#333A48',
@@ -46,6 +46,16 @@ module.exports = {
         success: '#219653',
         danger: '#D34053',
         warning: '#FFA70B',
+        background: '#FAF8F6', // Soft cream
+        surface: '#FFFFFF',    // Card/section backgrounds
+        primary: '#18181B',    // Main text (very dark gray/black)
+        secondary: '#6B7280',  // Muted gray text
+        accent: {
+          amber: '#FBBF24',   // Warm amber/gold
+          purple: '#A78BFA',  // Soft purple
+          blue: '#60A5FA',    // Muted blue
+        },
+        border: '#E5E7EB',     // Light gray for borders/lines
       },
       screens: {
         '2xsm': '375px',
