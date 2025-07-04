@@ -5,7 +5,7 @@ import { FaGithub } from 'react-icons/fa';
 
 export default function Hero() {
   return (
-    <div className='relative pt-14 w-full'>
+    <div className='relative pt-36 w-full'>
       <TopGradient />
       <BottomGradient />
       <div className='py-24 sm:py-32'>
@@ -14,8 +14,16 @@ export default function Hero() {
             <h1 className='text-4xl font-bold text-gray-900 sm:text-6xl dark:text-white'>
               Wasp Launch Week #10
             </h1>
-            <p className='mt-6 mx-auto max-w-2xl text-lg leading-8 text-gray-600 dark:text-white'>
-              Jul 14 - 18 | Kick-off at 4.30 PM CET / 10.30 AM EDT / 7.30 AM PT
+            <p className='mt-4 mx-auto max-w-2xl text-lg leading-8 text-gray-700 dark:text-gray-200 flex flex-col items-center'>
+              <span className='font-extrabold text-4xl text-amber-500 mb-2'>Jul 14 – 18</span>
+              <span className='font-semibold text-gray-900 dark:text-white'>
+                Kick-off at{' '}
+                <span className='text-purple-800 dark:text-purple-300'>4:30 PM CET</span>
+                {' / '}
+                <span className='text-purple-600 dark:text-purple-400'>10:30 AM EDT</span>
+                {' / '}
+                <span className='text-purple-500 dark:text-purple-500'>7:30 AM PT</span>
+              </span>
             </p>
             <div className='mt-10 flex items-center justify-center gap-x-6'>
               <a
@@ -25,18 +33,6 @@ export default function Hero() {
                 <FaGithub className='w-6 h-6' aria-hidden='true' />
                 Claim your ticket
               </a>
-            </div>
-          </div>
-          <div className='mt-14 flow-root sm:mt-14'>
-            <div className='-m-2  flex justify-center rounded-xl lg:-m-4 lg:rounded-2xl lg:p-4'>
-              <img
-                src={openSaasBannerWebp}
-                alt='App screenshot'
-                width={1000}
-                height={530}
-                loading='lazy'
-                className='rounded-md shadow-2xl ring-1 ring-gray-900/10'
-              />
             </div>
           </div>
         </div>
@@ -49,13 +45,13 @@ function TopGradient() {
   return (
     <div
       className='absolute top-0 right-0 -z-10 transform-gpu overflow-hidden w-full blur-3xl sm:top-0'
-    aria-hidden='true'
-  >
-    <div
-      className='aspect-[1020/880] w-[55rem] flex-none sm:right-1/4 sm:translate-x-1/2 dark:hidden bg-gradient-to-tr from-amber-400 to-purple-300 opacity-40'
-      style={{
-        clipPath: 'polygon(80% 20%, 90% 55%, 50% 100%, 70% 30%, 20% 50%, 50% 0)',
-      }}
+      aria-hidden='true'
+    >
+      <div
+        className='aspect-[1020/880] w-[55rem] flex-none sm:right-1/4 sm:translate-x-1/2 dark:hidden bg-gradient-to-tr from-amber-400 to-purple-300 opacity-40'
+        style={{
+          clipPath: 'polygon(80% 20%, 90% 55%, 50% 100%, 70% 30%, 20% 50%, 50% 0)',
+        }}
       />
     </div>
   );
@@ -65,14 +61,14 @@ function BottomGradient() {
   return (
     <div
       className='absolute inset-x-0 top-[calc(100%-40rem)] sm:top-[calc(100%-65rem)] -z-10 transform-gpu overflow-hidden blur-3xl'
-    aria-hidden='true'
-  >
-    <div
-      className='relative aspect-[1020/880] sm:-left-3/4 sm:translate-x-1/4 dark:hidden bg-gradient-to-br from-amber-400 to-purple-300  opacity-50 w-[72.1875rem]'
-      style={{
-        clipPath: 'ellipse(80% 30% at 80% 50%)',
-      }}
-    />
+      aria-hidden='true'
+    >
+      <div
+        className='relative aspect-[1020/880] sm:-left-3/4 sm:translate-x-1/4 dark:hidden bg-gradient-to-br from-amber-400 to-purple-300  opacity-50 w-[72.1875rem]'
+        style={{
+          clipPath: 'ellipse(80% 30% at 80% 50%)',
+        }}
+      />
     </div>
   );
 }

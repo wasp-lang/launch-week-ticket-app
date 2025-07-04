@@ -11,8 +11,7 @@
 - [x] Test login flow and ensure user info (name) is available after login
 
 ## 3. Landing Page
-- [ ] Create a new landing page component for Launch Week #10
-- [ ] Add prominent CTA: "Log in with GitHub"
+- [x] Add prominent CTA: "Log in with GitHub"
 - [ ] Route unauthenticated users to the landing page
 - [ ] Style the page to match the app's look and feel
 - [ ] Remove Login and Signup pages
