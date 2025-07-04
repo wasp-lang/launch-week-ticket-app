@@ -34,23 +34,6 @@ app OpenSaaS {
   auth: {
     userEntity: User,
     methods: {
-      // NOTE: If you decide to not use email auth, make sure to also delete the related routes and pages below.
-      //   (RequestPasswordReset(Route|Page), PasswordReset(Route|Page), EmailVerification(Route|Page))
-      email: {
-        fromField: {
-          name: "Open SaaS App",
-          email: "me@example.com"
-        },
-        emailVerification: {
-          clientRoute: EmailVerificationRoute,
-          getEmailContentFn: import { getVerificationEmailContent } from "@src/auth/email-and-pass/emails",
-        },
-        passwordReset: {
-          clientRoute: PasswordResetRoute,
-          getEmailContentFn: import { getPasswordResetEmailContent } from "@src/auth/email-and-pass/emails",
-        },
-        userSignupFields: import { getEmailUserFields } from "@src/auth/userSignupFields",
-      },
       // Uncomment to enable Google Auth (check https://wasp.sh/docs/auth/social-auth/google for setup instructions):
       // google: { // Guide for setting up Auth via Google
       //   userSignupFields: import { getGoogleUserFields } from "@src/auth/userSignupFields",
@@ -112,20 +95,6 @@ page SignupPage {
   component: import { Signup } from "@src/auth/SignupPage"
 }
 
-route RequestPasswordResetRoute { path: "/request-password-reset", to: RequestPasswordResetPage }
-page RequestPasswordResetPage {
-  component: import { RequestPasswordResetPage } from "@src/auth/email-and-pass/RequestPasswordResetPage",
-}
-
-route PasswordResetRoute { path: "/password-reset", to: PasswordResetPage }
-page PasswordResetPage {
-  component: import { PasswordResetPage } from "@src/auth/email-and-pass/PasswordResetPage",
-}
-
-route EmailVerificationRoute { path: "/email-verification", to: EmailVerificationPage }
-page EmailVerificationPage {
-  component: import { EmailVerificationPage } from "@src/auth/email-and-pass/EmailVerificationPage",
-}
 //#endregion
 
 //#region User
