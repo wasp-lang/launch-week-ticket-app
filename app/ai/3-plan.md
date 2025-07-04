@@ -6,15 +6,16 @@
 - [x] Add placeholder assets (e.g., Da Boi fallback image)
 
 ## 2. Auth: Enable GitHub Login
-- [ ] Update `main.wasp` to enable GitHub Auth (add provider, set up env vars)
-- [ ] Add GitHub client ID/secret to `.env.server` (or Fly.io secrets for deployment)
-- [ ] Test login flow and ensure user info (name) is available after login
+- [x] Update `main.wasp` to enable GitHub Auth (add provider, set up env vars)
+- [x] Add GitHub client ID/secret to `.env.server` (or Fly.io secrets for deployment)
+- [x] Test login flow and ensure user info (name) is available after login
 
 ## 3. Landing Page
 - [ ] Create a new landing page component for Launch Week #10
 - [ ] Add prominent CTA: "Log in with GitHub"
 - [ ] Route unauthenticated users to the landing page
 - [ ] Style the page to match the app's look and feel
+- [ ] Remove Login and Signup pages
 
 ## 4. Ticket Generation Flow
 - [ ] Create a protected ticket page (only accessible when logged in)
