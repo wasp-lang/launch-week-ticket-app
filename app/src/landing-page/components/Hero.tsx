@@ -11,24 +11,24 @@ export default function Hero() {
       <div className='py-24 sm:py-32'>
         <div className='mx-auto max-w-8xl px-6 lg:px-8'>
           <div className='lg:mb-18 mx-auto max-w-3xl text-center'>
-            <h1 className='text-4xl font-bold text-gray-900 sm:text-6xl dark:text-white'>
-              Wasp Launch Week #10
+            <h1 className="text-4xl font-bold sm:text-6xl text-gray-800 dark:text-white drop-shadow-md">
+              Wasp Launch Week <span className="text-accent-amber">#10</span>
             </h1>
-            <p className='mt-4 mx-auto max-w-2xl text-lg leading-8 text-gray-700 dark:text-gray-200 flex flex-col items-center'>
-              <span className='font-extrabold text-4xl text-amber-500 mb-2'>Jul 14 – 18</span>
-              <span className='font-semibold text-gray-900 dark:text-white'>
+            <p className='mt-4 mx-auto max-w-2xl text-lg leading-8 text-secondary dark:text-gray-200 flex flex-col items-center'>
+              <span className='font-extrabold text-4xl text-accent-amber mb-2'>Jul 14 – 18</span>
+              <span className='font-semibold text-primary dark:text-white'>
                 Kick-off at{' '}
-                <span className='text-purple-800 dark:text-purple-300'>4:30 PM CET</span>
+                <span className='text-accent-purple dark:text-purple-300'>4:30 PM CET</span>
                 {' / '}
-                <span className='text-purple-600 dark:text-purple-400'>10:30 AM EDT</span>
+                <span className='text-accent-blue dark:text-purple-400'>10:30 AM EDT</span>
                 {' / '}
-                <span className='text-purple-500 dark:text-purple-500'>7:30 AM PT</span>
+                <span className='text-accent-purple dark:text-purple-500'>7:30 AM PT</span>
               </span>
             </p>
             <div className='mt-10 flex items-center justify-center gap-x-6'>
               <a
                 href={githubSignInUrl}
-                className='rounded-md bg-black px-6 py-3 text-lg font-semibold text-white shadow-lg hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black transition-colors duration-200 flex items-center justify-center gap-3'
+                className='rounded-md bg-accent-amber px-6 py-3 text-lg font-semibold text-primary shadow-lg hover:bg-accent-purple focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent-amber transition-colors duration-200 flex items-center justify-center gap-3'
               >
                 <FaGithub className='w-6 h-6' aria-hidden='true' />
                 Claim your ticket
