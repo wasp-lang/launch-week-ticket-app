@@ -51,7 +51,7 @@ app OpenSaaS {
       // }
     },
     onAuthFailedRedirectTo: "/login",
-    onAuthSucceededRedirectTo: "/demo-app",
+    onAuthSucceededRedirectTo: "/ticket",
   },
 
   db: {
@@ -114,6 +114,12 @@ action updateIsUserAdminById {
   entities: [User]
 }
 //#endregion
+
+route TicketRoute { path: "/ticket", to: TicketPage }
+page TicketPage {
+  authRequired: true,
+  component: import TicketPage from "@src/ticket/TicketPage"
+}
 
 //#region Demo AI App
 route DemoAppRoute { path: "/demo-app", to: DemoAppPage }
