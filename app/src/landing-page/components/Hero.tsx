@@ -1,6 +1,7 @@
 import openSaasBannerWebp from '../../client/static/open-saas-banner.webp';
 import { DocsUrl } from '../../shared/common';
 import { githubSignInUrl } from 'wasp/client/auth';
+import { FaGithub } from 'react-icons/fa';
 
 export default function Hero() {
   return (
@@ -19,9 +20,10 @@ export default function Hero() {
             <div className='mt-10 flex items-center justify-center gap-x-6'>
               <a
                 href={githubSignInUrl}
-                className='rounded-md bg-black px-6 py-3 text-lg font-semibold text-white shadow-lg hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black transition-colors duration-200'
+                className='rounded-md bg-black px-6 py-3 text-lg font-semibold text-white shadow-lg hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black transition-colors duration-200 flex items-center justify-center gap-3'
               >
-                Log in with GitHub
+                <FaGithub className='w-6 h-6' aria-hidden='true' />
+                Claim your ticket
               </a>
             </div>
           </div>
