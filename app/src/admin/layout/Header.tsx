@@ -76,7 +76,7 @@ const Header = (props: {
 
         <ul className='flex items-center gap-2 2xsm:gap-4'>
           {/* <!-- Dark Mode Toggler --> */}
-          <DarkModeSwitcher />
+          {/* <DarkModeSwitcher /> */}
           {/* <!-- Dark Mode Toggler --> */}
 
           {/* <!-- Chat Notification Area --> */}

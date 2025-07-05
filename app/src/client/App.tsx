@@ -37,6 +37,11 @@ export default function App() {
     }
   }, [location]);
 
+  useEffect(() => {
+    document.documentElement.classList.add('dark');
+    document.documentElement.classList.remove('light');
+  }, []);
+
   return (
     <>
       <div className='min-h-screen bg-background text-primary dark:text-white dark:bg-neutral-900'>
