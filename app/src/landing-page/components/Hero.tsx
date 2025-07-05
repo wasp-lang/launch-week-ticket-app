@@ -6,23 +6,21 @@ import { FaGithub } from 'react-icons/fa';
 export default function Hero() {
   return (
     <div className='relative pt-36 w-full'>
-      <TopGradient />
-      <BottomGradient />
       <div className='py-24 sm:py-32'>
         <div className='mx-auto max-w-8xl px-6 lg:px-8'>
           <div className='lg:mb-18 mx-auto max-w-3xl text-center'>
             <h1 className="text-4xl font-bold sm:text-6xl text-gray-800 dark:text-white drop-shadow-md font-satoshi">
               Wasp Launch Week <span className="text-accent-amber">#10</span>
             </h1>
-            <p className='mt-4 mx-auto max-w-2xl text-lg leading-8 text-secondary dark:text-gray-200 flex flex-col items-center font-satoshi'>
-              <span className='font-extrabold text-4xl text-accent-amber mb-2 font-satoshi'>Jul 14 – 18</span>
-              <span className='font-semibold text-primary dark:text-white font-satoshi'>
+            <p className='mt-8 mx-auto max-w-2xl text-lg leading-8 text-secondary dark:text-gray-200 flex flex-col items-center font-satoshi'>
+              <span className='font-extrabold text-4xl text-accent-amber mb-8 font-satoshi'>Jul 14 – 18</span>
+              <span className='font-semibold text-primary dark:text-white font-satoshi flex flex-wrap gap-2 items-center justify-center'>
                 Kick-off at{' '}
-                <span className='text-accent-purple dark:text-purple-300 font-satoshi'>4:30 PM CET</span>
-                {' / '}
-                <span className='text-accent-blue dark:text-purple-400 font-satoshi'>10:30 AM EDT</span>
-                {' / '}
-                <span className='text-accent-purple dark:text-purple-500 font-satoshi'>7:30 AM PT</span>
+                <span className='inline-block rounded-full px-3 py-1 bg-accent-purple/20 text-accent-purple font-satoshi font-semibold'>7:30 AM PT</span>
+                <span className='text-secondary dark:text-gray-400 font-satoshi'>/</span>
+                <span className='inline-block rounded-full px-3 py-1 bg-accent-blue/20 text-accent-blue font-satoshi font-semibold'>10:30 AM EDT</span>
+                <span className='text-secondary dark:text-gray-400 font-satoshi'>/</span>
+                <span className='inline-block rounded-full px-3 py-1 bg-accent-purple/20 text-accent-purple font-satoshi font-semibold'>4:30 PM CET</span>
               </span>
             </p>
             <div className='mt-10 flex items-center justify-center gap-x-6'>
