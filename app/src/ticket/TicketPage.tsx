@@ -53,8 +53,8 @@ export default function TicketPage() {
           </div>
 
           <button
-            className="w-full max-w-md bg-primary hover:bg-primary/90 text-white font-semibold py-3 px-6 rounded-lg 
-              transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+            className="w-full max-w-md bg-accent-amber/90 hover:bg-accent-purple/90 text-primary font-extrabold py-3 px-6 rounded-lg shadow-lg
+              transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-accent-amber focus:ring-offset-2 border border-white/20"
             onClick={() => {
               // TODO: Implement ticket generation
               console.log('Generate ticket clicked');
@@ -74,25 +74,43 @@ export default function TicketPage() {
 
 function EmptyTicketPlaceholder() {
   return (
-    <div className="relative bg-gradient-to-br from-gray-900 to-boxdark rounded-2xl shadow-2xl p-16 ring-2 ring-primary/30 max-w-4xl min-w-[600px] mx-auto overflow-hidden">
-      <div className="relative z-10 flex flex-col h-full justify-between">
+    <div className="relative bg-gradient-to-br from-accent-amber to-warning rounded-2xl shadow-2xl p-16 ring-2 ring-primary/30 max-w-4xl min-w-[600px] mx-auto overflow-hidden">
+      {/* Glass overlay */}
+      <div
+        className="absolute inset-0 bg-white/10 backdrop-blur-xl border border-white/50 rounded-2xl z-0 pointer-events-none"
+        style={{ boxShadow: 'inset 0 2px 24px 0 rgba(255,255,255,0.25)' }}
+      />
+      {/* Organic top-left highlight */}
+      <div
+        className="absolute z-10 pointer-events-none"
+        style={{
+          left: '-8%',
+          top: '-6%',
+          width: '60%',
+          height: '38%',
+          borderTopLeftRadius: '2rem',
+          background: 'radial-gradient(ellipse 60% 38% at 30% 20%, rgba(255,255,255,0.38) 0%, rgba(255,255,255,0.10) 60%, rgba(255,255,255,0.01) 100%)',
+        }}
+      />
+      <div className="relative z-20 flex flex-col h-full justify-between">
         <div className="flex flex-row items-center justify-between gap-16">
           {/* Left: Name and role */}
           <div className="flex-1 min-w-0">
-            <div className="text-4xl md:text-5xl font-bold text-white mb-4 tracking-wide text-left">Your Name Here</div>
-            <div className="text-xl md:text-2xl text-gray-400 mb-6 text-left">Designer — Country <span role="img" aria-label="flag">🏳️</span></div>
+            <div className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 tracking-wide text-left">Your Name Here</div>
+            <div className="text-xl md:text-2xl text-gray-800 mb-6 text-left">Designer — Country <span role="img" aria-label="flag">🏳️</span></div>
           </div>
           {/* Right: Mascot/avatar */}
-          <div className="flex-shrink-0 flex items-center justify-center w-48 h-48 md:w-56 md:h-56 bg-gradient-to-br from-amber-400/30 to-orange-500/20 rounded-xl">
+          <div className="flex-shrink-0 flex items-center justify-center relative w-48 h-48 md:w-56 md:h-56">
             <img
               src={daBoi}
               alt="Wasp Mascot"
-              className="w-40 h-40 md:w-52 md:h-52 object-contain rounded-xl shadow-lg bg-white/80"
+              className="w-40 h-40 md:w-52 md:h-52 object-contain opacity-80"
+              style={{ background: 'transparent' }}
             />
           </div>
         </div>
         {/* Bottom: Date and URL */}
-        <div className="flex justify-between text-base text-gray-500 mt-12 font-mono w-full">
+        <div className="flex justify-between text-base text-gray-700 mt-12 font-mono w-full">
           <span>JUL 14-18</span>
           <span>WASP.SH</span>
         </div>
