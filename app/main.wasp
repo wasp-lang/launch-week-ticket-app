@@ -121,6 +121,10 @@ page TicketPage {
   component: import TicketPage from "@src/ticket/TicketPage"
 }
 
+action generateTicketImage {
+  fn: import { generateTicketImage } from "@src/ticket/operations.ts"
+}
+
 //#region Demo AI App
 route DemoAppRoute { path: "/demo-app", to: DemoAppPage }
 page DemoAppPage {

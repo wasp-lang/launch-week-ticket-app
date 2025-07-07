@@ -1,6 +1,7 @@
 import React from 'react';
 import { useAuth } from 'wasp/client/auth';
 import daBoi from '../client/static/da-boi.webp';
+import { generateTicketImage } from 'wasp/client/operations';
 
 export default function TicketPage() {
   const { data: user, isLoading, error } = useAuth();
@@ -55,9 +56,13 @@ export default function TicketPage() {
           <button
             className="w-full max-w-md bg-accent-amber/90 hover:bg-accent-purple/90 text-primary font-extrabold py-3 px-6 rounded-lg shadow-lg
               transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-accent-amber focus:ring-offset-2 border border-white/20"
-            onClick={() => {
-              // TODO: Implement ticket generation
-              console.log('Generate ticket clicked');
+            onClick={async () => {
+              try {
+                const response = await generateTicketImage({ prompt: `Ticket for ${username}` });
+                console.log('Ticket image response:', response);
+              } catch (err) {
+                console.error('Failed to generate ticket image:', err);
+              }
             }}
           >
             Generate My Ticket
