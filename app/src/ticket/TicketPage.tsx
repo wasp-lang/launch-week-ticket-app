@@ -48,7 +48,7 @@ export default function TicketPage() {
 
         <div className="w-full flex flex-col items-center space-y-8">
           {/* Wide ticket placeholder */}
-          <div className="w-full max-w-2xl">
+          <div className="w-full max-w-4xl">
             <EmptyTicketPlaceholder />
           </div>
 
@@ -74,25 +74,25 @@ export default function TicketPage() {
 
 function EmptyTicketPlaceholder() {
   return (
-    <div className="relative bg-gradient-to-br from-gray-900 to-boxdark rounded-2xl shadow-2xl p-8 ring-2 ring-primary/30 max-w-2xl mx-auto overflow-hidden">
+    <div className="relative bg-gradient-to-br from-gray-900 to-boxdark rounded-2xl shadow-2xl p-16 ring-2 ring-primary/30 max-w-4xl min-w-[600px] mx-auto overflow-hidden">
       <div className="relative z-10 flex flex-col h-full justify-between">
-        <div className="flex flex-row items-center justify-between gap-8 md:gap-16">
+        <div className="flex flex-row items-center justify-between gap-16">
           {/* Left: Name and role */}
           <div className="flex-1 min-w-0">
-            <div className="text-3xl md:text-4xl font-bold text-white mb-2 tracking-wide text-left truncate">Your Name Here</div>
-            <div className="text-lg md:text-xl text-gray-400 mb-4 text-left">Designer — Country <span role="img" aria-label="flag">🏳️</span></div>
+            <div className="text-4xl md:text-5xl font-bold text-white mb-4 tracking-wide text-left">Your Name Here</div>
+            <div className="text-xl md:text-2xl text-gray-400 mb-6 text-left">Designer — Country <span role="img" aria-label="flag">🏳️</span></div>
           </div>
           {/* Right: Mascot/avatar */}
-          <div className="flex-shrink-0 flex items-center justify-center w-32 h-32 md:w-40 md:h-40 bg-gradient-to-br from-amber-400/30 to-orange-500/20 rounded-xl">
+          <div className="flex-shrink-0 flex items-center justify-center w-48 h-48 md:w-56 md:h-56 bg-gradient-to-br from-amber-400/30 to-orange-500/20 rounded-xl">
             <img
               src={daBoi}
               alt="Wasp Mascot"
-              className="w-28 h-28 md:w-36 md:h-36 object-contain rounded-xl shadow-lg bg-white/80"
+              className="w-40 h-40 md:w-52 md:h-52 object-contain rounded-xl shadow-lg bg-white/80"
             />
           </div>
         </div>
         {/* Bottom: Date and URL */}
-        <div className="flex justify-between text-xs text-gray-500 mt-8 font-mono w-full">
+        <div className="flex justify-between text-base text-gray-500 mt-12 font-mono w-full">
           <span>JUL 14-18</span>
           <span>WASP.SH</span>
         </div>
