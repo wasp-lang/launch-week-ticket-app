@@ -3,7 +3,7 @@ import type { GenerateTicketImage } from 'wasp/server/operations';
 
 // Define input and output types for clarity
 export type GenerateTicketImageInput = { prompt: string };
-export type GenerateTicketImageOutput = { imageUrl: string; ticketNumber: number };
+export type GenerateTicketImageOutput = { imageNumber: number; ticketNumber: number };
 
 export const generateTicketImage: GenerateTicketImage<GenerateTicketImageInput, GenerateTicketImageOutput> = async (args, context) => {
   if (!context.user) {
@@ -13,10 +13,11 @@ export const generateTicketImage: GenerateTicketImage<GenerateTicketImageInput, 
   // Generate a random 6-digit ticket number
   const ticketNumber = Math.floor(100000 + Math.random() * 900000);
 
-  // In a real implementation, call OpenAI or another image API here using args.prompt
-  // For now, return a placeholder image
+  // Select a random mascot image number (1-3)
+  const randomMascotNumber = Math.floor(Math.random() * 3) + 1;
+
   return {
-    imageUrl: '/static/da-boi.webp',
+    imageNumber: randomMascotNumber,
     ticketNumber,
   };
 }; 

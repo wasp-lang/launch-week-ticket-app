@@ -6,6 +6,7 @@ import { generateTicketImage } from 'wasp/client/operations';
 export default function TicketPage() {
   const { data: user, isLoading, error } = useAuth();
   const [ticketNumber, setTicketNumber] = useState<number | null>(null);
+  const [imageNumber, setImageNumber] = useState<number | null>(null);
 
   if (isLoading) {
     return (
@@ -52,7 +53,7 @@ export default function TicketPage() {
         <div className="w-full flex flex-col items-center space-y-8">
           {/* Wide ticket placeholder */}
           <div className="w-full max-w-4xl">
-            <Ticket ticketNumber={ticketNumber} />
+            <Ticket ticketNumber={ticketNumber} imageNumber={imageNumber} />
           </div>
 
           <button
@@ -62,6 +63,7 @@ export default function TicketPage() {
               try {
                 const response = await generateTicketImage({ prompt: `Ticket for ${username}` });
                 setTicketNumber(response.ticketNumber);
+                setImageNumber(response.imageNumber);
                 console.log('Ticket image response:', response);
               } catch (err) {
                 console.error('Failed to generate ticket image:', err);
@@ -78,9 +80,12 @@ export default function TicketPage() {
       </div>
     </div>
   );
-} 
+}
 
-function Ticket({ ticketNumber }: { ticketNumber: number | null }) {
+function Ticket({ ticketNumber, imageNumber }: { ticketNumber: number | null; imageNumber: number | null }) {
+  // Construct the mascot image URL
+  const mascotImageUrl = imageNumber ? `/bois/boi-${imageNumber}.png` : daBoi;
+
   return (
     <div className="relative flex items-center justify-center max-w-3xl min-w-[600px] mx-auto">
       {/* Outer gradient border (thinner, closer to ticket) */}
@@ -151,9 +156,9 @@ function Ticket({ ticketNumber }: { ticketNumber: number | null }) {
             {/* Right: Mascot/avatar */}
             <div className="flex-shrink-0 flex items-center justify-center relative w-48 h-48 md:w-56 md:h-56">
               <img
-                src={daBoi}
+                src={mascotImageUrl}
                 alt="Wasp Mascot"
-                className="w-40 h-40 md:w-52 md:h-52 object-contain opacity-80"
+                className="w-40 h-40 md:w-52 md:h-52 object-contain opacity-90"
                 style={{ background: 'transparent' }}
               />
             </div>
