@@ -1,5 +1,6 @@
 import React from 'react';
 import { useAuth } from 'wasp/client/auth';
+import daBoi from '../client/static/da-boi.webp';
 
 export default function TicketPage() {
   const { data: user, isLoading, error } = useAuth();
@@ -83,13 +84,17 @@ function EmptyTicketPlaceholder() {
           </div>
           {/* Right: Mascot/avatar */}
           <div className="flex-shrink-0 flex items-center justify-center w-32 h-32 md:w-40 md:h-40 bg-gradient-to-br from-amber-400/30 to-orange-500/20 rounded-xl">
-            <span className="text-6xl md:text-7xl">🎫</span>
+            <img
+              src={daBoi}
+              alt="Wasp Mascot"
+              className="w-28 h-28 md:w-36 md:h-36 object-contain rounded-xl shadow-lg bg-white/80"
+            />
           </div>
         </div>
         {/* Bottom: Date and URL */}
         <div className="flex justify-between text-xs text-gray-500 mt-8 font-mono w-full">
-          <span>AUGUST 7-11</span>
-          <span>SUPABASE.COM/TICKET</span>
+          <span>JUL 14-18</span>
+          <span>WASP.SH</span>
         </div>
       </div>
     </div>
