@@ -50,7 +50,7 @@ app OpenSaaS {
       //   configFn: import { getDiscordAuthConfig } from "@src/auth/userSignupFields"
       // }
     },
-    onAuthFailedRedirectTo: "/login",
+    onAuthFailedRedirectTo: "/",
     onAuthSucceededRedirectTo: "/ticket",
   },
 

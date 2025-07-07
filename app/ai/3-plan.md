@@ -13,12 +13,13 @@
 ## 3. Landing Page
 - [x] Add prominent CTA: "Log in with GitHub"
 - [x] Route unauthenticated users to the landing page
-- [ ] Style the page to match the app's look and feel
+- [x] Style the page to match the app's look and feel
 - [ ] Remove Login and Signup pages
 
 ## 4. Ticket Generation Flow
-- [ ] Create a protected ticket page (only accessible when logged in)
-- [ ] Add "Generate my ticket" button
+- [x] Create a protected ticket page (only accessible when logged in)
+- [x] Add "Generate my ticket" button
+- [ ] Add a nice placeholder for the "empty" ticket
 - [ ] Implement a Wasp action for ticket generation:
   - [ ] Get user's name from Auth context
   - [ ] Generate a unique ticket number (sequential or random)
