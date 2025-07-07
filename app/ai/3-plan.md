@@ -20,11 +20,11 @@
 - [x] Create a protected ticket page (only accessible when logged in)
 - [x] Add "Generate my ticket" button
 - [x] Add a nice placeholder for the "empty" ticket
-- [ ] Implement a Wasp action for ticket generation:
+- [x] Implement a Wasp action for ticket generation:
   - [x] Get user's name from Auth context
-  - [ ] Generate a unique ticket number (sequential or random)
-  - [ ] Call AI image API for Da Boi action (mock/fallback for first iteration)
-  - [ ] Return ticket data to the client
+  - [x] Generate a unique ticket number (sequential or random)
+  - [x] Call AI image API for Da Boi action (mock/fallback for first iteration)
+  - [x] Return ticket data to the client
 - [ ] Display the ticket: user's name, ticket number, mascot image
 - [ ] Handle errors (login failure, image generation failure)
 

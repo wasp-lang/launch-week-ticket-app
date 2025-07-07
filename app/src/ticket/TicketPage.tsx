@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useAuth } from 'wasp/client/auth';
 import daBoi from '../client/static/da-boi.webp';
 import { generateTicketImage } from 'wasp/client/operations';
 
 export default function TicketPage() {
   const { data: user, isLoading, error } = useAuth();
+  const [ticketNumber, setTicketNumber] = useState<number | null>(null);
 
   if (isLoading) {
     return (
@@ -34,6 +35,7 @@ export default function TicketPage() {
   }
 
   const username = user.username || 'User';
+  console.log(user)
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4">
@@ -50,7 +52,7 @@ export default function TicketPage() {
         <div className="w-full flex flex-col items-center space-y-8">
           {/* Wide ticket placeholder */}
           <div className="w-full max-w-4xl">
-            <EmptyTicketPlaceholder />
+            <Ticket ticketNumber={ticketNumber} />
           </div>
 
           <button
@@ -59,6 +61,7 @@ export default function TicketPage() {
             onClick={async () => {
               try {
                 const response = await generateTicketImage({ prompt: `Ticket for ${username}` });
+                setTicketNumber(response.ticketNumber);
                 console.log('Ticket image response:', response);
               } catch (err) {
                 console.error('Failed to generate ticket image:', err);
@@ -77,7 +80,7 @@ export default function TicketPage() {
   );
 } 
 
-function EmptyTicketPlaceholder() {
+function Ticket({ ticketNumber }: { ticketNumber: number | null }) {
   return (
     <div className="relative flex items-center justify-center max-w-3xl min-w-[600px] mx-auto">
       {/* Outer gradient border (thinner, closer to ticket) */}
@@ -118,7 +121,7 @@ function EmptyTicketPlaceholder() {
           }}
         >
           <span className="text-2xl font-mono font-bold text-white drop-shadow-lg tracking-widest">
-            NO 0000965
+            {ticketNumber ? `NO ${ticketNumber}` : 'NO 000000'}
           </span>
         </div>
         {/*12nner border (glass layer) */}
