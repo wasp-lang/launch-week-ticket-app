@@ -103,7 +103,20 @@ function EmptyTicketPlaceholder() {
             '0 0 24px 3px rgba(251,191,36,0.32), 0 0 48px 6px rgba(167,139,250,0.18)',
         }}
       >
-        {/* Inner border (glass layer) */}
+        {/* Vertical ticket number */}
+        <div
+          className="absolute right-3 top-1/2 z-40 select-none"
+          style={{
+            writingMode: 'vertical-rl',
+            textOrientation: 'mixed',
+            transform: 'translateY(-50%) rotate(-180deg)',
+          }}
+        >
+          <span className="text-2xl font-mono font-bold text-white drop-shadow-lg tracking-widest">
+            NO 0000965
+          </span>
+        </div>
+        {/*12nner border (glass layer) */}
         <div
           className="absolute inset-0 bg-white/10 backdrop-blur-xl border border-white/50 rounded-2xl z-0 pointer-events-none"
           style={{ boxShadow: 'inset 0 2px 24px 0 rgba(255,255,255,0.25)' }}

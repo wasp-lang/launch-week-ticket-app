@@ -19,9 +19,9 @@
 ## 4. Ticket Generation Flow
 - [x] Create a protected ticket page (only accessible when logged in)
 - [x] Add "Generate my ticket" button
-- [ ] Add a nice placeholder for the "empty" ticket
+- [x] Add a nice placeholder for the "empty" ticket
 - [ ] Implement a Wasp action for ticket generation:
-  - [ ] Get user's name from Auth context
+  - [x] Get user's name from Auth context
   - [ ] Generate a unique ticket number (sequential or random)
   - [ ] Call AI image API for Da Boi action (mock/fallback for first iteration)
   - [ ] Return ticket data to the client
