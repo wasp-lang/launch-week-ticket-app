@@ -74,7 +74,7 @@ export default function TicketPage() {
 
 function EmptyTicketPlaceholder() {
   return (
-    <div className="relative flex items-center justify-center max-w-4xl min-w-[600px] mx-auto">
+    <div className="relative flex items-center justify-center max-w-3xl min-w-[600px] mx-auto">
       {/* Outer gradient border (thinner, closer to ticket) */}
       <div
         className="absolute z-10 pointer-events-none"
@@ -83,8 +83,8 @@ function EmptyTicketPlaceholder() {
           left: '-6px',
           right: '-6px',
           bottom: '-6px',
-          borderRadius: '1.25rem', // slightly less than ticket for a crisp edge
-          padding: '1.5px', // thinner border
+          borderRadius: '1.25rem',
+          padding: '1.5px',
           background:
             'linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.45) 40%, rgba(255,255,255,0.08) 80%, rgba(255,255,255,0) 100%)',
           WebkitMask:
@@ -97,7 +97,7 @@ function EmptyTicketPlaceholder() {
       </div>
       {/* Ticket with inner border, glass, glow, and highlight */}
       <div
-        className="relative bg-gradient-to-br from-accent-amber to-warning rounded-2xl shadow-2xl p-16 ring-2 ring-primary/30 w-full overflow-hidden z-20"
+        className="relative bg-gradient-to-br from-accent-amber to-warning rounded-2xl shadow-2xl p-8 ring-2 ring-primary/30 w-full max-w-3xl overflow-hidden z-20"
         style={{
           boxShadow:
             '0 0 24px 3px rgba(251,191,36,0.32), 0 0 48px 6px rgba(167,139,250,0.18)',
