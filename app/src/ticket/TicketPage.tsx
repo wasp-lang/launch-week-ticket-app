@@ -110,7 +110,7 @@ function Ticket({ ticketNumber, imageNumber }: { ticketNumber: number | null; im
       </div>
       {/* Ticket with inner border, glass, glow, and highlight */}
       <div
-        className="relative bg-gradient-to-br from-accent-amber to-warning rounded-2xl shadow-2xl p-8 ring-2 ring-primary/30 w-full max-w-3xl overflow-hidden z-20"
+        className="relative bg-gradient-to-br from-accent-amber to-warning rounded-2xl shadow-2xl p-6 ring-2 ring-primary/30 w-full max-w-3xl overflow-hidden z-20"
         style={{
           boxShadow:
             '0 0 24px 3px rgba(251,191,36,0.32), 0 0 48px 6px rgba(167,139,250,0.18)',
@@ -147,24 +147,24 @@ function Ticket({ ticketNumber, imageNumber }: { ticketNumber: number | null; im
           }}
         />
         <div className="relative z-30 flex flex-col h-full justify-between">
-          <div className="flex flex-row items-center justify-between gap-16">
+          <div className="flex flex-row items-center gap-12">
             {/* Left: Name and role */}
-            <div className="flex-1 min-w-0">
+            <div className="min-w-0">
               <div className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 tracking-wide text-left">Your Name Here</div>
               <div className="text-xl md:text-2xl text-gray-800 mb-6 text-left">Designer — Country <span role="img" aria-label="flag">🏳️</span></div>
             </div>
             {/* Right: Mascot/avatar */}
-            <div className="flex-shrink-0 flex items-center justify-center relative w-48 h-48 md:w-56 md:h-56">
+            <div className="flex items-center justify-center relative w-48 h-48 md:w-64 md:h-64">
               <img
                 src={mascotImageUrl}
                 alt="Wasp Mascot"
-                className="w-40 h-40 md:w-52 md:h-52 object-contain opacity-90"
+                className="object-contain opacity-90"
                 style={{ background: 'transparent' }}
               />
             </div>
           </div>
           {/* Bottom: Date and URL */}
-          <div className="flex justify-between text-base text-gray-700 mt-12 font-mono w-full">
+          <div className="flex justify-between text-base text-gray-700 mt-4 font-mono w-full">
             <span>JUL 14-18</span>
             <span>WASP.SH</span>
           </div>
