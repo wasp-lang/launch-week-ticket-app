@@ -53,7 +53,12 @@ export default function TicketPage() {
         <div className="w-full flex flex-col items-center space-y-8">
           {/* Wide ticket placeholder */}
           <div className="w-full max-w-4xl">
-            <Ticket ticketNumber={ticketNumber} imageNumber={imageNumber} />
+            <Ticket
+              ticketNumber={ticketNumber}
+              imageNumber={imageNumber}
+              username={username}
+              showOverlay={ticketNumber === null}
+            />
           </div>
 
           <button
@@ -82,12 +87,33 @@ export default function TicketPage() {
   );
 }
 
-function Ticket({ ticketNumber, imageNumber }: { ticketNumber: number | null; imageNumber: number | null }) {
+function Ticket({
+  ticketNumber,
+  imageNumber,
+  username,
+  showOverlay,
+}: {
+  ticketNumber: number | null;
+  imageNumber: number | null;
+  username: string;
+  showOverlay: boolean;
+}) {
   // Construct the mascot image URL
   const mascotImageUrl = imageNumber ? `/bois/boi-${imageNumber}.png` : daBoi;
 
   return (
     <div className="relative flex items-center justify-center max-w-3xl min-w-[600px] mx-auto">
+      {/* Blurry overlay */}
+      {showOverlay && (
+        <div
+          className="absolute inset-0 z-50 flex items-center justify-center bg-white/60 backdrop-blur-md rounded-2xl"
+          style={{ pointerEvents: 'none' }}
+        >
+          <span className="text-2xl font-bold text-gray-700 opacity-80">
+            Generate your ticket to reveal it!
+          </span>
+        </div>
+      )}
       {/* Outer gradient border (thinner, closer to ticket) */}
       <div
         className="absolute z-10 pointer-events-none"
@@ -147,14 +173,16 @@ function Ticket({ ticketNumber, imageNumber }: { ticketNumber: number | null; im
           }}
         />
         <div className="relative z-30 flex flex-col h-full justify-between">
-          <div className="flex flex-row items-center gap-12">
+          <div className="flex flex-row items-center justify-between">
             {/* Left: Name and role */}
             <div className="min-w-0">
-              <div className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 tracking-wide text-left">Your Name Here</div>
-              <div className="text-xl md:text-2xl text-gray-800 mb-6 text-left">Designer — Country <span role="img" aria-label="flag">🏳️</span></div>
+              <div className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 tracking-wide text-left">
+                {username}
+              </div>
+              <div className="text-xl md:text-2xl text-gray-700 mb-6 text-left italic">Wasp Launch Week #10</div>
             </div>
             {/* Right: Mascot/avatar */}
-            <div className="flex items-center justify-center relative w-48 h-48 md:w-64 md:h-64">
+            <div className="flex items-center justify-center relative w-48 h-48 md:w-64 md:h-64 mr-4">
               <img
                 src={mascotImageUrl}
                 alt="Wasp Mascot"
