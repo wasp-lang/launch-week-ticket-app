@@ -28,6 +28,10 @@
 - [ ] Display the ticket: user's name, ticket number, mascot image
 - [ ] Handle errors (login failure, image generation failure)
 
+## Next:
+- Each generated ticket gets its own public page (with OG image)
+- Create more boi images
+
 ## 5. (Optional, Preferred) Download/Share
 - [ ] Add a button to download or share the ticket (can be stubbed initially)
 
