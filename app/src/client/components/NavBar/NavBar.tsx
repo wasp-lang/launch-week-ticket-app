@@ -41,7 +41,7 @@ export default function AppNavBar({ navigationItems }: { navigationItems: Naviga
           >
             <NavLogo />
             {isLandingPage && (
-              <span className='ml-2 text-sm font-semibold leading-6 dark:text-white'>Your SaaS</span>
+              <span className='ml-2 text-sm font-semibold leading-6 dark:text-white'>Wasp Launch Week #10</span>
             )}
           </WaspRouterLink>
         </div>
