@@ -13,8 +13,8 @@ export const generateTicketImage: GenerateTicketImage<GenerateTicketImageInput, 
   // Generate a random 6-digit ticket number
   const ticketNumber = Math.floor(100000 + Math.random() * 900000);
 
-  // Select a random mascot image number (1-44)
-  const randomMascotNumber = Math.floor(Math.random() * 44) + 1;
+  // Select a random mascot image number (1-47)
+  const randomMascotNumber = Math.floor(Math.random() * 47) + 1;
 
   return {
     imageNumber: randomMascotNumber,
